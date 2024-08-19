@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('training_days', function (Blueprint $table) {
             $table->id();
-            $table->integer('day_number');
+            $table->foreignId('training_plan_id')->constrained('training_plans')->onDelete('cascade');
             $table->string('day_name');
             $table->timestamps();
         });

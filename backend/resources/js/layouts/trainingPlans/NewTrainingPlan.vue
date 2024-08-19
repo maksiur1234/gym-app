@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import CreateTrainingPlan from "@/sections/trainingPlans/CreateTrainingPlan.vue";
+import CreateTrainingPlan from "@/layouts/trainingPlans/CreateTrainingPlan.vue";
 </script>
 
 <style scoped>

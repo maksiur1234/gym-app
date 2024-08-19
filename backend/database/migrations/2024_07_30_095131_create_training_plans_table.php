@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('training_plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('desc')->nullable();
+            $table->text('desc');
             $table->unsignedBigInteger('created_by');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();

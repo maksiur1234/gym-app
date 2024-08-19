@@ -6,6 +6,7 @@ use App\Http\Controllers\User\UserTrainingPlanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Trainers\TrainerController;
+use App\Http\Controllers\Exercise\ExerciseController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +24,8 @@ Route::middleware([
     Route::put('/update-user/{id}', [UserController::class, 'update']);
 
     Route::get('/roles', [RoleController::class, 'all']);
+
+    Route::get('/exercises', [ExerciseController::class, 'index']);
 
     Route::get('/training-plans-data', [TrainingPlanController::class, 'getUserPlan']);
     Route::get('/training-plans', [TrainingPlanController::class, 'view']);

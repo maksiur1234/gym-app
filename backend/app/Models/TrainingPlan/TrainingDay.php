@@ -2,25 +2,21 @@
 
 namespace App\Models\TrainingPlan;
 
-use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\TrainingPlan\TrainingDayExercise;
 
-class TrainingPlan extends Model
+class TrainingDay extends Model
 {
     use HasFactory;
 
-    protected $table = 'training_plans';
+    protected $table = 'training_days';
 
     protected $fillable = [
-        'name',
-        'desc',
-        'created_by',
-        'user_id',
+        'training_plan_id',
+        'day_name',
     ];
 
-    public function days()
+    public function exercises()
     {
         return $this->hasMany(TrainingDayExercise::class);
     }
