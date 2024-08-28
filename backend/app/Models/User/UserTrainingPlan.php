@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 class UserTrainingPlan extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $fillable = [
         'user_id',
         'training_plan_id',
+        'is_default',
     ];
 
     public function user()

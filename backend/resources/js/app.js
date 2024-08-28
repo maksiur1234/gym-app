@@ -15,6 +15,8 @@ import AllUsers from "./layouts/users/AllUsers.vue";
 import AllTrainers from "@/layouts/trainers/AllTrainers.vue";
 import Login from "@/layouts/auth/Login.vue";
 import Register from "@/layouts/auth/Register.vue";
+import Details from "@/layouts/trainingPlans/Details.vue";
+import Schedule from "@/layouts/Schedule/Schedule.vue";
 import theme from 'tailwindcss/defaultTheme';
 
 import Menubar from 'primevue/menubar';
@@ -52,6 +54,8 @@ import Divider from 'primevue/divider';
 import ToggleButton from 'primevue/togglebutton';
 import FileUpload from 'primevue/fileupload';
 import Image from 'primevue/image';
+import DataView from 'primevue/dataview';
+import Tag from 'primevue/tag';
 
 const app = createApp({});
 
@@ -73,6 +77,8 @@ app.component('all-users', AllUsers);
 app.component('all-trainers', AllTrainers);
 app.component('login-component', Login);
 app.component('register-component', Register);
+app.component('training-plan-details-component', Details);
+app.component('schedule-component', Schedule);
 
 app.component('Panel', Panel);
 app.component('Button', Button);
@@ -111,5 +117,7 @@ app.component('Divider', Divider);
 app.component('ToggleButton', ToggleButton);
 app.component('FileUpload', FileUpload);
 app.component('Image', Image);
+app.component('DataView', DataView);
+app.component('Tag', Tag);
 
 app.mount("#app");

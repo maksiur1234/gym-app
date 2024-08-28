@@ -10,8 +10,8 @@ class UserPolicy
      * Create a new policy instance.
      */
 
-    public function update(User $user, User $model)
+    public function update(User $currentUser, User $user)
     {
-        return $user->role_id === 1 || $user->id === $model->id;
+        return $currentUser->role_id === 1;
     }
 }

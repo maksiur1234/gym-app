@@ -4,21 +4,25 @@ namespace App\Http\Controllers\TrainingPlan;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TrainingPlan\StoreTrainingPlanRequest;
-use App\Models\TrainingPlan\TrainingDay;
-use App\Models\TrainingPlan\TrainingDayExercise;
 use App\Models\TrainingPlan\TrainingPlan;
+use App\Models\User\UserTrainingPlan;
 use App\Repositories\TrainingPlan\TrainingPlanRepositoryInterface;
+use App\Services\TrainingPlan\TrainingPlanService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class TrainingPlanController extends Controller
 {
     protected $trainingPlanRepo;
+    protected $trainingPlanService;
 
-    public function __construct(TrainingPlanRepositoryInterface $trainingPlanRepo)
+    public function __construct(
+        TrainingPlanRepositoryInterface $trainingPlanRepo,
+        TrainingPlanService $trainingPlanService
+    )
     {
         $this->trainingPlanRepo = $trainingPlanRepo;
+        $this->trainingPlanService = $trainingPlanService;
     }
 
     public function view()
@@ -39,56 +43,57 @@ class TrainingPlanController extends Controller
     {
         return view('training_plans.create');
     }
-
-    public function store(Request $request)
+    public function store(StoreTrainingPlanRequest $request)
     {
-//        $request->validate([
-//            'name' => 'required|string|max:255',
-//            'desc' => 'nullable|string',
-//            'user_id' => 'required|exists:users,id',
-//            'days' => 'required|array',
-//            'days.*.day_name' => 'required|string',
-//            'days.*.exercises' => 'required|array',
-//            'days.*.exercises.*.exercise_id' => 'required|exists:exercises,id',
-//            'days.*.exercises.*.series' => 'required|integer',
-//            'days.*.exercises.*.repetitions' => 'required|integer',
-//            'days.*.exercises.*.rir' => 'nullable|integer',
-//            'days.*.exercises.*.tempo' => 'nullable|string',
-//            'days.*.exercises.*.break' => 'nullable|string',
-//        ]);
+        $validatedData = $request->validated();
 
-        DB::transaction(function () use ($request) {
-            // Tworzenie planu treningowego
-            $trainingPlan = TrainingPlan::create([
-                'name' => $request->input('name'),
-                'desc' => $request->input('desc'),
-                'created_by' => auth()->id(),
-                'user_id' => $request->input('user_id'),
+        try {
+            $trainingPlan = $this->trainingPlanService->createTrainingPlan($validatedData);
+
+            return response()->json([
+                'message' => 'Training plan created successfully!',
+                'trainingPlan' => $trainingPlan,
             ]);
-
-            foreach ($request->input('days') as $day) {
-                // Tworzenie dni treningowych
-                $trainingDay = TrainingDay::create([
-                    'training_plan_id' => $trainingPlan->id,
-                    'day_name' => $day['day_name'],
-                ]);
-
-                foreach ($day['exercises'] as $exercise) {
-                    // Dodawanie ćwiczeń do dni treningowych
-                    TrainingDayExercise::create([
-                        'training_day_id' => $trainingDay->id,
-                        'exercise_id' => $exercise['exercise_id'],
-                        'series' => $exercise['series'],
-                        'repetitions' => $exercise['repetitions'],
-                        'rir' => $exercise['rir'],
-                        'tempo' => $exercise['tempo'],
-                        'break' => $exercise['break'],
-                    ]);
-                }
-            }
-        });
-
-        return response()->json(['message' => 'Plan treningowy zapisany pomyślnie.']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
     }
 
+    public function show($id)
+    {
+        $trainingPlan = TrainingPlan::with('trainingDays.exercises')->find($id);
+
+        if (!$trainingPlan) {
+            return response()->json(['message' => 'Plan not found'], 404);
+        }
+
+        return view('training_plans.details');
+    }
+    public function details($id)
+    {
+        $trainingPlan = TrainingPlan::with('trainingDays.exercises')->find($id);
+
+        return response()->json($trainingPlan);
+    }
+
+    public function setAsDefault(Request $request, $planId)
+    {
+        $user = Auth::user();
+        $existingPlan = UserTrainingPlan::where('user_id', $user->id)
+            ->where('training_plan_id', $planId)
+            ->first();
+
+        if ($existingPlan) {
+            return response()->json(['message' => 'Training plan is deafult.'], 400);
+        }
+
+        UserTrainingPlan::updateOrCreate(
+            ['user_id' => $user->id],
+            ['training_plan_id' => $planId],
+        );
+
+        return response()->json(['message' => 'Training plan set as deafult.'], 200);
+    }
 }

@@ -19,8 +19,8 @@
         <div class="mb-8">
             <h3 class="text-2xl font-semibold mb-4">Plan treningowy:</h3>
             <div class="p-4 rounded-lg border border-gray-300">
-                <p><strong>Nazwa:</strong> {{ name }}</p>
-                <p><strong>Opis:</strong> {{ desc }}</p>
+                <p><strong>Nazwa:</strong> {{ planName }}</p>
+                <p><strong>Opis:</strong> {{ planDesc }}</p>
             </div>
         </div>
 
@@ -70,6 +70,8 @@ import { inject } from 'vue';
 const selectedUser = inject('selectedUser');
 const name = inject('name');
 const desc = inject('desc');
+const planName = inject('planName');
+const planDesc = inject('planDesc');
 const rows = inject('rows');
 const additionalInfo = inject('additionalInfo');
 </script>

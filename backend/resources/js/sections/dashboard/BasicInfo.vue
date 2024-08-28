@@ -23,7 +23,11 @@
                 <Menu ref="menu" id="config_menu" :model="items" popup />
             </template>
             <p class="m-0">
-                {{ user.desc }}
+                <h1>Aktualny plan treningowy: </h1>
+                <div v-if="plan">
+                    <h2>{{plan.name}}</h2>
+                    <p>{{plan.desc}}</p>
+                </div>
             </p>
         </Panel>
     </div>
@@ -34,12 +38,21 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 const loggedUser = ref([]);
+const plan = ref();
 
+const fetchDefaultPlan = async () => {
+    try {
+        const response = await axios.get('/user/get-default-plan');
+        plan.value = response.data;
+        console.log(plan.value)
+    } catch (error) {
+        console.error('Error fetching default plan:', error);
+    }
+};
 const fetchUser = async () => {
   try {
     const response = await axios.get('/fetch-user-data');
     loggedUser.value = response.data
-    console.log(loggedUser.value);
   } catch (error) {
     console.error(error);
   }
@@ -48,6 +61,7 @@ const fetchUser = async () => {
 
 onMounted(() => {
   fetchUser();
+  fetchDefaultPlan();
 })
 
 </script>

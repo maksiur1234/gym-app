@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Trainers\TrainerController;
 use App\Http\Controllers\Exercise\ExerciseController;
+use App\Http\Controllers\Schedule\TrainingScheduleController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,12 +32,22 @@ Route::middleware([
     Route::get('/training-plans', [TrainingPlanController::class, 'view']);
     Route::get('/new-training-plan', [TrainingPlanController::class, 'viewCreate'])->name('training-plans.create');
     Route::post('/store-training-plans', [TrainingPlanController::class, 'store']);
+    Route::get('/training-plan-details/{id}', [TrainingPlanController::class, 'show']);
+    Route::get('/training-plan-details-data/{id}', [TrainingPlanController::class, 'details']);
+    Route::post('/training-plan/{id}/set-default', [TrainingPlanController::class, 'setAsDefault']);
 
     Route::get('/trainers', [TrainerController::class, 'view']);
     Route::get('/all-trainers', [TrainerController::class, 'index']);
 
     Route::get('/user-training-plans', [UserTrainingPlanController::class, 'getAssignedPlan']);
     Route::post('/user-training-plans/assign', [UserTrainingPlanController::class, 'assign']);
+    Route::get('/user/get-default-plan', [UserTrainingPlanController::class, 'getDefaultTrainingPlan']);
+    Route::post('/user/set-default-plan', [UserTrainingPlanController::class, 'setDefaultTrainingPlan']);
+
+    Route::get('/schedule', [TrainingScheduleController::class, 'view']);
+    Route::get('/schedules/{userId}', [TrainingScheduleController::class, 'index']);
+    Route::post('/schedules', [TrainingScheduleController::class, 'store']);
+    Route::delete('/schedules/{id}', [TrainingScheduleController::class, 'destroy']);
 });
 
 Route::middleware([

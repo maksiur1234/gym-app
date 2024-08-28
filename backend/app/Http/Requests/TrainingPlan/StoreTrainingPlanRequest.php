@@ -22,10 +22,18 @@ class StoreTrainingPlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'desc' => 'required|string',
-            'created_by' => 'nullable',
-            'user_id' => 'nullable',
+            'planName' => 'required|string',
+            'planDesc' => 'nullable|string',
+            'user_id' => 'required|numeric',
+            'trainingDays' => 'required|numeric|min:1',
+            'rows' => 'required|array',
+            'rows.*' => 'array',
+            'rows.*.*.name' => 'required|string',
+            'rows.*.*.sets' => 'required|numeric',
+            'rows.*.*.reps' => 'required|numeric',
+            'rows.*.*.rir' => 'required|numeric',
+            'rows.*.*.tempo' => 'required|string',
+            'rows.*.*.break' => 'required|string',
         ];
     }
 }

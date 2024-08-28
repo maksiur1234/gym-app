@@ -5,7 +5,6 @@ namespace App\Models\TrainingPlan;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\TrainingPlan\TrainingDayExercise;
 
 class TrainingPlan extends Model
 {
@@ -20,8 +19,12 @@ class TrainingPlan extends Model
         'user_id',
     ];
 
-    public function days()
+    public function trainingDays()
     {
-        return $this->hasMany(TrainingDayExercise::class);
+        return $this->hasMany(TrainingDay::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -5,18 +5,17 @@
         <!-- Nazwa planu -->
         <div class="mb-6">
             <label for="planName" class="block text-lg font-semibold mb-2">Nazwa planu</label>
-            <InputText id="planName" v-model="name" class="w-full p-3 border rounded-lg shadow-sm" />
+            <InputText id="planName" v-model="planName" class="w-full p-3 border rounded-lg shadow-sm" />
         </div>
 
         <!-- Opis planu -->
         <div class="mb-6">
             <FloatLabel>
-                <Textarea v-model="desc" rows="5" cols="30" class="w-full p-3 border rounded-lg shadow-sm"/>
+                <Textarea v-model="planDesc" rows="5" cols="30" class="w-full p-3 border rounded-lg shadow-sm"/>
                 <label>Ogólny opis planu treningowego. Cele, założenia itp.</label>
             </FloatLabel>
         </div>
 
-        <!-- Rozplanowanie treningów -->
         <div class="mb-6">
             <label class="block text-lg font-semibold mb-2">Rozplanowanie treningów</label>
             <p class="mb-2">Podaj ilość jednostek treningowych w tygodniu.</p>
@@ -44,19 +43,10 @@
 import { inject, ref } from 'vue';
 
 const trainingDays = inject('trainingDays');
-const setTrainingDays = inject('setTrainingDays');
-const name = inject('name');
-const setName = inject('setName');
-const desc = inject('desc');
-const setDesc = inject('setDesc');
+const planName = inject('planName');
+const planDesc = inject('planDesc');
 
-const updateTrainingDays = () => {
-    setTrainingDays(trainingDays.value);
-    setName(name.value);
-    setDesc(desc.value);
-};
 </script>
 
 <style scoped>
-/* Additional styles if necessary */
 </style>

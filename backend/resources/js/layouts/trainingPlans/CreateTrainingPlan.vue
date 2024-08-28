@@ -24,7 +24,6 @@
                                     <p class="text-gray-500">{{ selectedUser.desc }}</p>
                                 </div>
                             </div>
-                            <!-- Opcjonalnie, dodaj dodatkowe informacje lub akcje -->
                         </div>
                         <div v-else>
                             <p>Wybierz użytkownika, aby wyświetlić jego szczegóły.</p>
@@ -85,11 +84,10 @@ import Creator from "@/sections/trainingPlans/Creator.vue";
 import AdditionalInfo from "@/sections/trainingPlans/AdditionalInfo.vue";
 import Summary from "@/sections/trainingPlans/Summary.vue";
 
-// Define reactive variables to hold data
 const selectedUser = ref();
 const trainingDays = ref([]);
-const name = ref([]);
-const desc = ref([]);
+const planName = ref([]);
+const planDesc = ref([]);
 const additionalInfo = ref();
 const rows = ref({});
 
@@ -105,21 +103,21 @@ const saveUser = () => {
 // Provide the data
 provide('selectedUser', selectedUser);
 provide('trainingDays', trainingDays);
-provide('name', name);
-provide('desc', desc);
+provide('planName', planName);
+provide('planDesc', planDesc);
 provide('additionalInfo', additionalInfo);
 provide('rows', rows);
 
-// Function to save plan to the server
 const savePlan = async () => {
     try {
-        // Collect all the data to be sent
         const planData = {
-            user: selectedUser.value,
+            user_id: selectedUser.value.id,
             trainingDays: trainingDays.value,
-            additionalInfo: additionalInfo.value
+            additionalInfo: additionalInfo.value,
+            planName: planName.value,
+            planDesc: planDesc.value,
+            rows: rows.value,
         };
-        // Send data to the server
         await axios.post('/store-training-plans', planData);
         alert('Plan został zapisany pomyślnie!');
     } catch (error) {

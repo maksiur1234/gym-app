@@ -22,7 +22,6 @@ class UserResource extends JsonResource
             'role' => $this->resource->role,
             'desc' => $this->resource->desc,
             'profile_photo_path' => $this->resource->profile_photo_path,
-            //add more data to array which we want to return
         ];
     }
 

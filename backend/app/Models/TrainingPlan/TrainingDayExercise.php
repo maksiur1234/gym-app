@@ -22,6 +22,10 @@ class TrainingDayExercise extends Model
         'break'
     ];
 
+    public function trainingDay()
+    {
+        return $this->belongsTo(TrainingDay::class);
+    }
     public function exercise()
     {
         $this->belongsTo(Exercise::class);

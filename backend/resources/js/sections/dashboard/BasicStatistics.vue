@@ -27,8 +27,7 @@ const loggedUser = ref([]);
 const fetchUser = async () => {
     try {
         const response = await axios.get('/fetch-user-data');
-        loggedUser.value = response.data
-        console.log(loggedUser.value);
+        loggedUser.value = response.data;
     } catch (error) {
         console.error(error);
     }

@@ -20,4 +20,9 @@ class TrainingDay extends Model
     {
         return $this->hasMany(TrainingDayExercise::class);
     }
+
+    public function trainingPlan()
+    {
+        return $this->belongsTo(TrainingPlan::class);
+    }
 }

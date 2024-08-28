@@ -24,4 +24,9 @@ class TrainingPlanRepository implements TrainingPlanRepositoryInterface
     {
         return TrainingPlan::where('user_id', $userId)->get();
     }
+
+    public function create(array $data)
+    {
+        return TrainingPlan::create($data);
+    }
 }
