@@ -8,6 +8,7 @@ use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Trainers\TrainerController;
 use App\Http\Controllers\Exercise\ExerciseController;
 use App\Http\Controllers\Schedule\TrainingScheduleController;
+use App\Http\Controllers\Notification\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,6 +39,8 @@ Route::middleware([
 
     Route::get('/trainers', [TrainerController::class, 'view']);
     Route::get('/all-trainers', [TrainerController::class, 'index']);
+    Route::get('/trainers/profile/{id}', [TrainerController::class, 'showProfile']);
+    Route::get('/trainers/info/{id}', [TrainerController::class, 'aboutTrainer']);
 
     Route::get('/user-training-plans', [UserTrainingPlanController::class, 'getAssignedPlan']);
     Route::post('/user-training-plans/assign', [UserTrainingPlanController::class, 'assign']);
@@ -48,6 +51,10 @@ Route::middleware([
     Route::get('/schedules/{userId}', [TrainingScheduleController::class, 'index']);
     Route::post('/schedules', [TrainingScheduleController::class, 'store']);
     Route::delete('/schedules/{id}', [TrainingScheduleController::class, 'destroy']);
+
+    Route::post('/send-notification', [NotificationController::class, 'store']);
+    Route::get('/notifications', [NotificationController::class, 'view']);
+    Route::get('/all-notifications', [NotificationController::class, 'index']);
 });
 
 Route::middleware([

@@ -61,10 +61,9 @@
                       </a>
                   </li>
                 <li>
-                  <a v-ripple class="flex items-center cursor-pointer p-4 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
+                  <a href="/notifications" v-ripple class="flex items-center cursor-pointer p-4 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
                     <i class="pi pi-comments mr-2"></i>
-                    <span class="font-medium">Wiadomości</span>
-                    <span class="inline-flex items-center justify-center ml-auto bg-primary text-primary-contrast rounded-full" style="min-width: 1.5rem; height: 1.5rem">3</span>
+                    <span class="font-medium">Powiadomienia</span>
                   </a>
                 </li>
                 <li>
@@ -142,6 +141,10 @@
             <span class="font-bold">User</span>
           </a>
         </div>
+          <div class="m-4 flex items-center cursor-pointer p-4 gap-2 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
+              <i class="pi pi-sign-out mr-2"></i>
+              <button @click="logout">Wyloguj</button>
+          </div>
       </div>
     </div>
   </template>
@@ -158,6 +161,27 @@
 
   const toggleAcc = () => {
     isOpenAcc.value = !isOpenAcc.value;
+  }
+
+  const logout = async () => {
+      try {
+          const response = await fetch('/logout', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+              }
+          });
+
+          if (response.ok) {
+              // Redirect to login page after successful logout
+              window.location.href = '/login';
+          } else {
+              alert('Logout failed');
+          }
+      } catch (error) {
+          console.error('Error:', error);
+      }
   }
   </script>
 

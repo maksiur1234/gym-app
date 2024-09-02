@@ -1,19 +1,45 @@
 <template>
-    <div class="flex justify-center items-center min-h-screen bg-gray-900">
-        <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
-            <h2 class="text-2xl font-semibold mb-6 text-green-500">Logowanie</h2>
-            <form @submit.prevent="handleSubmit">
-                <div class="mb-4">
-                    <label for="email" class="block text-gray-300 mb-2">Email</label>
-                    <input v-model="email" type="email" id="email" placeholder="Wprowadź email" class="w-full p-2 rounded border border-gray-700 bg-gray-900 text-gray-300" required />
+    <div class="flex justify-center items-center min-h-screen bg-gray-100">
+        <Card class="shadow-lg h-auto w-1/2 max-w-md p-6">
+            <template #header>
+                <div class="flex justify-center mb-4">
+                    <img alt="user header" class="rounded-full h-24 w-24" src="https://img.freepik.com/premium-vector/gym-logo-muscle-logo-muscle-training-logo-muscle-development-center-logo-body-building-logo_848918-3459.jpg?size=338&ext=jpg&ga=GA1.1.1413502914.1725148800&semt=ais_hybrid" />
                 </div>
-                <div class="mb-4">
-                    <label for="password" class="block text-gray-300 mb-2">Hasło</label>
-                    <input v-model="password" type="password" id="password" placeholder="Wprowadź hasło" class="w-full p-2 rounded border border-gray-700 bg-gray-900 text-gray-300" required />
+            </template>
+            <template #title>
+                <div class="flex justify-center text-xl font-semibold">
+                    Witaj w GymApp!
                 </div>
-                <button type="submit" class="w-full py-2 bg-green-500 text-white rounded hover:bg-green-600">Zaloguj się</button>
-            </form>
-        </div>
+            </template>
+            <template #subtitle>
+                <hr class="w-60 h-1 mx-auto my-4 bg-gray-300 border-0 rounded dark:bg-gray-700">
+            </template>
+            <template #content>
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-2">
+                        <label for="email" class="font-medium">Email</label>
+                        <InputText id="email" v-model="email" aria-describedby="email-help" class="p-2 border rounded" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label for="password" class="font-medium">Hasło</label>
+                        <InputText id="password" v-model="password" type="password" aria-describedby="password-help" class="p-2 border rounded" />
+                        <small id="password-help" class="text-right text-sm text-gray-500">Zapomniałeś hasła?</small>
+                    </div>
+                    <div class="flex items-center">
+                        <Checkbox v-model="remember" inputId="ingredient1" name="remember" value="remember" />
+                        <label for="ingredient1" class="ml-2"> Zapamiętaj mnie </label>
+                    </div>
+                </div>
+            </template>
+            <template #footer>
+                <div class="flex gap-4 mt-4">
+                    <Button label="Zaloguj się" class="w-full" @click="handleSubmit" />
+                </div>
+                <div class="flex justify-center mt-2 text-sm text-gray-600">
+                    Nie masz konta? <a href="/register" class="text-blue-600 hover:underline">Zarejestruj się!</a>
+                </div>
+            </template>
+        </Card>
     </div>
 </template>
 
@@ -23,6 +49,7 @@ import axios from 'axios';
 
 const email = ref('');
 const password = ref('');
+const remember = ref(false);
 
 const handleSubmit = async () => {
     try {
@@ -30,13 +57,25 @@ const handleSubmit = async () => {
             email: email.value,
             password: password.value,
         });
-        console.log('Zalogowano:', response.data);
+        window.location.href = '/dashboard';
     } catch (error) {
+        alert('Niepoprawne dane logowania');
         console.error('Błąd logowania:', error);
     }
 };
 </script>
 
 <style scoped>
-/* Custom styles */
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.shadow-lg {
+    border-radius: 8px;
+    padding: 20px;
+}
+
+img.rounded-full {
+    object-fit: cover;
+}
 </style>

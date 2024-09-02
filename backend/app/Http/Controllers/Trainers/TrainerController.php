@@ -29,4 +29,20 @@ class TrainerController extends Controller
 
         return TrainerResource::collection($trainers);
     }
+
+    public function showProfile($id)
+    {
+        return view('trainers.trainer-profile', ['trainerId' => $id]);
+    }
+
+    public function aboutTrainer($id)
+    {
+        $trainer = User::where('role_id', 2)->find($id);
+
+        if (!$trainer) {
+            return response()->json(['message' => 'Trainer not found'], 404);
+        }
+
+        return response()->json($trainer);
+    }
 }

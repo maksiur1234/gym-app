@@ -17,6 +17,8 @@ import Login from "@/layouts/auth/Login.vue";
 import Register from "@/layouts/auth/Register.vue";
 import Details from "@/layouts/trainingPlans/Details.vue";
 import Schedule from "@/layouts/Schedule/Schedule.vue";
+import Profile from "@/layouts/trainers/Profile.vue";
+import AllNotifications from "@/layouts/notification/AllNotifications.vue";
 import theme from 'tailwindcss/defaultTheme';
 
 import Menubar from 'primevue/menubar';
@@ -56,6 +58,7 @@ import FileUpload from 'primevue/fileupload';
 import Image from 'primevue/image';
 import DataView from 'primevue/dataview';
 import Tag from 'primevue/tag';
+import Checkbox from 'primevue/checkbox';
 
 const app = createApp({});
 
@@ -79,6 +82,8 @@ app.component('login-component', Login);
 app.component('register-component', Register);
 app.component('training-plan-details-component', Details);
 app.component('schedule-component', Schedule);
+app.component('trainer-profile-component', Profile);
+app.component('notifications-component', AllNotifications);
 
 app.component('Panel', Panel);
 app.component('Button', Button);
@@ -119,5 +124,6 @@ app.component('FileUpload', FileUpload);
 app.component('Image', Image);
 app.component('DataView', DataView);
 app.component('Tag', Tag);
+app.component('Checkbox', Checkbox);
 
 app.mount("#app");

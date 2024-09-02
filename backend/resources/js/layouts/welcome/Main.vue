@@ -1,9 +1,9 @@
 <script setup>
-import HeroSection from "/resources/js/sections/welcome/HeroSection.vue";
-import FeatureSection from "/resources/js/sections/welcome/FeatureSection.vue";
-import DownloadSection from "/resources/js/sections/welcome/DownloadSection.vue";
-import FaqSection from "/resources/js/sections/welcome/FaqSection.vue";
-import SubscribeSection from "/resources/js/sections/welcome/SubscribeSection.vue";
+import HeroSection from "@/sections/welcome/HeroSection.vue";
+import FeatureSection from "@/sections/welcome/FeatureSection.vue";
+import DownloadSection from "@/sections/welcome/DownloadSection.vue";
+import FaqSection from "@/sections/welcome/FaqSection.vue";
+import SubscribeSection from "@/sections/welcome/SubscribeSection.vue";
 </script>
 
 <template>
