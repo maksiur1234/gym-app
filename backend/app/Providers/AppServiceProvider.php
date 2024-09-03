@@ -9,6 +9,8 @@ use App\Repositories\Exercise\ExerciseRepository;
 use App\Repositories\Exercise\ExerciseRepositoryInterface;
 use App\Repositories\Trainer\TrainerRepository;
 use App\Repositories\Trainer\TrainerRepositoryInterface;
+use App\Repositories\TrainingPlan\ReadyTrainingPlanRepository;
+use App\Repositories\TrainingPlan\ReadyTrainingPlanRepositoryInterface;
 use App\Repositories\TrainingPlan\TrainingDayExerciseRepository;
 use App\Repositories\TrainingPlan\TrainingDayExerciseRepositoryInterface;
 use App\Repositories\TrainingPlan\TrainingDayRepository;
@@ -19,6 +21,8 @@ use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\User\UserTrainingPlanRepository;
 use App\Repositories\User\UserTrainingPlanRepositoryInterface;
+use App\Services\TrainingPlan\ReadyTrainingPlanService;
+use App\Services\TrainingPlan\ReadyTrainingPlanServiceInterface;
 use App\Services\TrainingPlan\TrainingPlanService;
 use App\Services\TrainingPlan\TrainingPlanServiceInterface;
 use App\Repositories\Notification\NotificationRepository;
@@ -50,6 +54,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TrainingPlanServiceInterface::class, TrainingPlanService::class);
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
         $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
+        $this->app->bind(ReadyTrainingPlanRepositoryInterface::class, ReadyTrainingPlanRepository::class);
+        $this->app->bind(ReadyTrainingPlanServiceInterface::class, ReadyTrainingPlanService::class);
     }
 
     /**

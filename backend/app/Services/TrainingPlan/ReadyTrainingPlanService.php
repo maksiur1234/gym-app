@@ -9,7 +9,7 @@ use App\Repositories\TrainingPlan\TrainingDayExerciseRepositoryInterface;
 use App\Repositories\User\UserTrainingPlanRepositoryInterface;
 use App\Repositories\Exercise\ExerciseRepositoryInterface;
 
-class TrainingPlanService implements TrainingPlanServiceInterface
+class ReadyTrainingPlanService implements TrainingPlanServiceInterface
 {
     protected $trainingPlanRepo;
     protected $exerciseRepo;
@@ -18,7 +18,7 @@ class TrainingPlanService implements TrainingPlanServiceInterface
     protected $userTrainingPlanRepo;
 
     public function __construct(
-        TrainingPlanRepositoryInterface $trainingPlanRepo,
+        ReadyTrainingPlanRepositoryInterface $trainingPlanRepo,
         ExerciseRepositoryInterface $exerciseRepo,
         TrainingDayRepositoryInterface $trainingDayRepo,
         TrainingDayExerciseRepositoryInterface $trainingDayExerciseRepo,
@@ -36,8 +36,8 @@ class TrainingPlanService implements TrainingPlanServiceInterface
         $trainingPlan = $this->trainingPlanRepo->create([
             'name' => $data['planName'],
             'desc' => $data['planDesc'],
-            'created_by' => $data['user_id'],
-            'user_id' => $data['user_id'],
+            'price' => $data['price'],
+            'created_by' => auth()->id(),
         ]);
 
         // add training days and exercises
@@ -70,13 +70,9 @@ class TrainingPlanService implements TrainingPlanServiceInterface
             }
         }
 
-        $this->userTrainingPlanRepo->create([
-            'user_id' => $data['user_id'],
-            'training_plan_id' => $trainingPlan->id,
-        ]);
-
         return $trainingPlan;
     }
+
     public function setDefaultTrainingPlan($userId, $trainingPlanId)
     {
         \Log::info('Attempting to set default training plan', [

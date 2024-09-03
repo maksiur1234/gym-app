@@ -45,12 +45,12 @@
                 <li>
                   <a v-ripple href="/training-plans" class="flex items-center cursor-pointer p-4 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
                     <i class="pi pi-bookmark mr-2"></i>
-                    <span class="font-medium">Plany treningowe</span>
+                    <span class="font-medium">Twoje plany treningowe</span>
                   </a>
                 </li>
                   <li>
                       <a v-ripple href="/users" class="flex items-center cursor-pointer p-4 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
-                          <i class="pi pi-users mr-2"></i>
+                          <i class="pi pi-user mr-2"></i>
                           <span class="font-medium">Uzytkownicy</span>
                       </a>
                   </li>
@@ -78,6 +78,12 @@
                     <span class="font-medium">Ustawienia</span>
                   </a>
                 </li>
+                  <li>
+                      <a v-ripple href="/ready-training-plans" class="flex items-center cursor-pointer p-4 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
+                          <i class="pi pi-globe mr-2"></i>
+                          <span class="font-medium">Gotowe plany treningowe</span>
+                      </a>
+                  </li>
               </ul>
             </li>
           </ul>

@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Models\TrainingPlan\ReadyTrainingPlan;
 use App\Models\TrainingPlan\TrainingPlan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,5 +25,9 @@ class UserTrainingPlan extends Model
     public function trainingPlan()
     {
         return $this->belongsTo(TrainingPlan::class);
+    }
+    public function readyTrainingPlan()
+    {
+        return $this->belongsTo(ReadyTrainingPlan::class);
     }
 }

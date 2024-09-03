@@ -9,6 +9,7 @@ use App\Http\Controllers\Trainers\TrainerController;
 use App\Http\Controllers\Exercise\ExerciseController;
 use App\Http\Controllers\Schedule\TrainingScheduleController;
 use App\Http\Controllers\Notification\NotificationController;
+use App\Http\Controllers\TrainingPlan\ReadyTrainingPlanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -55,6 +56,10 @@ Route::middleware([
     Route::post('/send-notification', [NotificationController::class, 'store']);
     Route::get('/notifications', [NotificationController::class, 'view']);
     Route::get('/all-notifications', [NotificationController::class, 'index']);
+
+    Route::get('/ready-training-plans', [ReadyTrainingPlanController::class, 'view']);
+    Route::get('/ready-training-plans-data', [ReadyTrainingPlanController::class, 'index']);
+    Route::post('/store-ready-training-plans', [ReadyTrainingPlanController::class, 'store']);
 });
 
 Route::middleware([

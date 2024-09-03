@@ -19,6 +19,7 @@ import Details from "@/layouts/trainingPlans/Details.vue";
 import Schedule from "@/layouts/Schedule/Schedule.vue";
 import Profile from "@/layouts/trainers/Profile.vue";
 import AllNotifications from "@/layouts/notification/AllNotifications.vue";
+import GlobalList from "@/layouts/trainingPlans/GlobalList.vue";
 import theme from 'tailwindcss/defaultTheme';
 
 import Menubar from 'primevue/menubar';
@@ -75,6 +76,7 @@ app.component('dashboard-component', Dashboard);
 app.component('main-component', Main);
 app.component('card-component', MainCard);
 app.component('training-plans-component', TrainingPlan);
+app.component('global-training-plans-component', GlobalList);
 app.component('new-training-plan-component', NewTrainingPlan);
 app.component('all-users', AllUsers);
 app.component('all-trainers', AllTrainers);

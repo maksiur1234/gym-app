@@ -82,6 +82,9 @@
                         <div class="field">
                             <Password v-model="userData.password" placeholder="Hasło" fluid />
                         </div>
+                        <div class="field">
+                            <Password v-model="userData.password_confirmation" placeholder="Potwierdź hasło" fluid />
+                        </div>
                     </div>
                     <div class="flex pt-6 justify-end">
                         <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback(2)" />
@@ -146,16 +149,18 @@ const userData = ref({
     surname: '',
     email: '',
     password: '',
+    password_confirmation: '',
     weight: '',
     height: '',
     age: '',
     training_intership: '',
-    desc: ''
+    desc: '',
+    role_id: 3,
 });
 const saveUser = async () => {
     try {
         console.log(userData.value);
-        await axios.post('/save-user', userData.value);
+        await axios.post('/register', userData.value);
 
     } catch (error) {
         console.error(error);
@@ -175,20 +180,8 @@ const customBase64Uploader = async (event) => {
 };
 
 const activeStep = ref(1);
-const completed = ref(false);
-const products = ref();
 const name = ref();
 const email = ref();
 const password = ref();
-const option1 = ref(false);
-const option2 = ref(false);
-const option3 = ref(false);
-const option4 = ref(false);
-const option5 = ref(false);
-const option6 = ref(false);
-const option7 = ref(false);
-const option8 = ref(false);
-const option9 = ref(false);
-const option10 = ref(false);
 
 </script>

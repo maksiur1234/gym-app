@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { ref, provide } from 'vue';
+import { ref, provide, onMounted } from 'vue';
 import axios from 'axios';
 import Configuration from "@/sections/trainingPlans/Configuration.vue";
 import PickUser from "@/sections/trainingPlans/PickUser.vue";
@@ -84,45 +84,68 @@ import Creator from "@/sections/trainingPlans/Creator.vue";
 import AdditionalInfo from "@/sections/trainingPlans/AdditionalInfo.vue";
 import Summary from "@/sections/trainingPlans/Summary.vue";
 
-const selectedUser = ref();
+const selectedUser = ref(null);
+const isPublic = ref(false);
 const trainingDays = ref([]);
 const planName = ref([]);
 const planDesc = ref([]);
 const additionalInfo = ref();
 const rows = ref({});
+const created_by = ref();
+const price = ref([]);
 
 // Handlers
 const handleUserChange = (user) => {
     selectedUser.value = user;
-};
-
-const saveUser = () => {
-    console.log('Zapisano usera: ', selectedUser.value);
+    isPublic.value = user === null;
 };
 
 // Provide the data
 provide('selectedUser', selectedUser);
+provide('isPublic', isPublic);
 provide('trainingDays', trainingDays);
 provide('planName', planName);
 provide('planDesc', planDesc);
 provide('additionalInfo', additionalInfo);
 provide('rows', rows);
+provide('price', price);
 
+const fetchCurrentUser = async () => {
+    try {
+        const response = await axios.get('/fetch-user-data');
+        created_by.value = response.data.user.id;
+        console.log(created_by.value);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+    }
+};
 const savePlan = async () => {
     try {
         const planData = {
-            user_id: selectedUser.value.id,
+            user_id: selectedUser.value ? selectedUser.value.id : null,
+            created_by: created_by.value,
+            is_public: isPublic.value,
             trainingDays: trainingDays.value,
             additionalInfo: additionalInfo.value,
             planName: planName.value,
             planDesc: planDesc.value,
             rows: rows.value,
+            price: price.value,
         };
-        await axios.post('/store-training-plans', planData);
+
+        if (isPublic.value) {
+            await axios.post('/store-ready-training-plans', planData);
+        } else {
+            await axios.post('/store-training-plans', planData);
+        }
+
         alert('Plan został zapisany pomyślnie!');
     } catch (error) {
         console.error('Błąd podczas zapisywania planu:', error);
         alert('Wystąpił błąd podczas zapisywania planu.');
     }
 };
+onMounted(() => {
+    fetchCurrentUser();
+})
 </script>

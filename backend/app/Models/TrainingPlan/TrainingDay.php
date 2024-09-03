@@ -25,4 +25,8 @@ class TrainingDay extends Model
     {
         return $this->belongsTo(TrainingPlan::class);
     }
+    public function readyTrainingPlan()
+    {
+        return $this->belongsTo(ReadyTrainingPlan::class);
+    }
 }
