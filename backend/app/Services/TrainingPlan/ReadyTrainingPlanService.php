@@ -43,7 +43,7 @@ class ReadyTrainingPlanService implements TrainingPlanServiceInterface
         // add training days and exercises
         foreach (range(1, $data['trainingDays']) as $dayIndex) {
             $trainingDay = $this->trainingDayRepo->create([
-                'training_plan_id' => $trainingPlan->id,
+                'ready_training_plan_id' => $trainingPlan->id,
                 'day_name' => 'Dzień ' . $dayIndex,
             ]);
 

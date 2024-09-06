@@ -13,6 +13,7 @@ class TrainingDay extends Model
 
     protected $fillable = [
         'training_plan_id',
+        'ready_training_plan_id',
         'day_name',
     ];
 

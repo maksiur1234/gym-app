@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@primevue/themes": "^4.0.0",
+        "@stripe/stripe-js": "^4.4.0",
         "@vitejs/plugin-vue": "^5.0.5",
         "primeicons": "^7.0.0",
         "primevue": "^4.0.0",

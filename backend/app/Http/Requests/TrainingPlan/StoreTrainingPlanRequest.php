@@ -24,7 +24,7 @@ class StoreTrainingPlanRequest extends FormRequest
         return [
             'planName' => 'required|string',
             'planDesc' => 'nullable|string',
-            'price' => 'nullable|numeric',
+            'price' => 'nullable',
             'user_id' => 'nullable|numeric',
             'trainingDays' => 'required|numeric|min:1',
             'rows' => 'required|array',

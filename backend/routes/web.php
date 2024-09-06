@@ -10,6 +10,7 @@ use App\Http\Controllers\Exercise\ExerciseController;
 use App\Http\Controllers\Schedule\TrainingScheduleController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\TrainingPlan\ReadyTrainingPlanController;
+use App\Http\Controllers\Stripe\StripeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -60,6 +61,10 @@ Route::middleware([
     Route::get('/ready-training-plans', [ReadyTrainingPlanController::class, 'view']);
     Route::get('/ready-training-plans-data', [ReadyTrainingPlanController::class, 'index']);
     Route::post('/store-ready-training-plans', [ReadyTrainingPlanController::class, 'store']);
+
+    Route::get('/stripe', [StripeController::class, 'index'])->name('index');
+    Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
+    Route::get('/success', [StripeController::class, 'success'])->name('success');
 });
 
 Route::middleware([

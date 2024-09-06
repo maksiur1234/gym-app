@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('user_training_plans', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('training_plan_id');
+            $table->unsignedBigInteger('ready_training_plan_id');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('training_plan_id')->references('id')->on('training_plans')->onDelete('cascade');
+            $table->foreign('ready_training_plan_id')->references('id')->on('ready_training_plans')->onDelete('cascade');
 
             $table->primary(['user_id', 'training_plan_id']);;
         });
