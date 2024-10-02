@@ -20,6 +20,8 @@ import Schedule from "@/layouts/Schedule/Schedule.vue";
 import Profile from "@/layouts/trainers/Profile.vue";
 import AllNotifications from "@/layouts/notification/AllNotifications.vue";
 import GlobalList from "@/layouts/trainingPlans/GlobalList.vue";
+import SkillTree from './layouts/skill-tree/SkillTree.vue';
+import Dialog from 'primevue/dialog';
 import theme from 'tailwindcss/defaultTheme';
 
 import Menubar from 'primevue/menubar';
@@ -60,6 +62,7 @@ import Image from 'primevue/image';
 import DataView from 'primevue/dataview';
 import Tag from 'primevue/tag';
 import Checkbox from 'primevue/checkbox';
+import OrganizationChart from 'primevue/organizationchart';
 
 const app = createApp({});
 
@@ -86,6 +89,7 @@ app.component('training-plan-details-component', Details);
 app.component('schedule-component', Schedule);
 app.component('trainer-profile-component', Profile);
 app.component('notifications-component', AllNotifications);
+app.component('skill-tree-component', SkillTree);
 
 app.component('Panel', Panel);
 app.component('Button', Button);
@@ -127,5 +131,7 @@ app.component('Image', Image);
 app.component('DataView', DataView);
 app.component('Tag', Tag);
 app.component('Checkbox', Checkbox);
+app.component('OrganizationChart', OrganizationChart);
+app.component('Dialog', Dialog);
 
 app.mount("#app");

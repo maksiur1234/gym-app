@@ -57,9 +57,35 @@ const fetchCurrentPlan = async () => {
     }
 };
 
-const toggleTraining = () => {
-    isTrainingActive.value = !isTrainingActive.value;
-}
+const toggleTraining = async () => {
+    if (isTrainingActive.value) {
+        try {
+            await axios.post('/workout/end', {
+                session_id: currentSessionId.value,
+                total_sets: calculateTotalSets(), // Implementuj metodę do obliczenia całkowitej liczby serii
+            });
+            isTrainingActive.value = false;
+        } catch (error) {
+            console.error('Error ending workout session:', error);
+        }
+    } else {
+        try {
+            const response = await axios.post('/workout/start', {
+                training_plan_id: currentPlanId.value,
+            });
+            currentSessionId.value = response.data.session_id;
+            isTrainingActive.value = true;
+        } catch (error) {
+            console.error('Error starting workout session:', error);
+        }
+    }
+};
+
+const calculateTotalSets = () => {
+    // Implementuj logikę obliczania całkowitej liczby serii
+};
+
+const currentSessionId = ref(null);
 
 onMounted(() => {
     fetchCurrentPlan();

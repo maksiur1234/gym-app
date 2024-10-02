@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_training_plans', function (Blueprint $table) {
+        Schema::create('user_category_progress', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('training_plan_id');
+            $table->unsignedBigInteger('category_id');
+            $table->integer('category_level')->default(0);
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('training_plan_id')->references('id')->on('training_plans')->onDelete('cascade');
-
-            $table->primary(['user_id', 'training_plan_id']);;
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_training_plans');
+        Schema::dropIfExists('user_category_progress');
     }
 };

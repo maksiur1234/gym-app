@@ -13,7 +13,6 @@ class TrainingDay extends Model
 
     protected $fillable = [
         'training_plan_id',
-        'ready_training_plan_id',
         'day_name',
     ];
 
@@ -25,9 +24,5 @@ class TrainingDay extends Model
     public function trainingPlan()
     {
         return $this->belongsTo(TrainingPlan::class);
-    }
-    public function readyTrainingPlan()
-    {
-        return $this->belongsTo(ReadyTrainingPlan::class);
     }
 }

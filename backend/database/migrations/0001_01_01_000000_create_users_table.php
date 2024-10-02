@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('age');
             $table->integer('training_intership');
             $table->text('desc');
+            $table->integer('global_level')->default(0);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -14,11 +14,7 @@ return new class extends Migration
         Schema::create('training_days', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('training_plan_id')->default(0);
-            $table->unsignedBigInteger('ready_training_plan_id')->default(0);
-
             $table->foreign('training_plan_id')->references('id')->on('training_plans')->onDelete('cascade');
-            $table->foreign('ready_training_plan_id')->references('id')->on('ready_training_plans')->onDelete('cascade');
-
             $table->string('day_name');
             $table->timestamps();
         });

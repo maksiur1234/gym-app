@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Exercise\Exercise;
 use App\Models\Role;
 use App\Models\TrainingPlan\TrainingPlan;
 use App\Models\User\User;
@@ -19,5 +20,6 @@ class DatabaseSeeder extends Seeder
         Role::factory(5)->create();
         User::factory(10)->create();
         TrainingPlan::factory(10)->create();
+        Exercise::factory(20)->create();
     }
 }

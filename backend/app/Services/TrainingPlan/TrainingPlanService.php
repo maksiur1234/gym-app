@@ -2,7 +2,6 @@
 namespace App\Services\TrainingPlan;
 
 use App\Models\User\UserTrainingPlan;
-use App\Repositories\TrainingPlan\ReadyTrainingPlanRepositoryInterface;
 use App\Repositories\TrainingPlan\TrainingPlanRepositoryInterface;
 use App\Repositories\TrainingPlan\TrainingDayRepositoryInterface;
 use App\Repositories\TrainingPlan\TrainingDayExerciseRepositoryInterface;

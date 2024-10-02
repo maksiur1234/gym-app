@@ -37,7 +37,7 @@ class TrainerController extends Controller
 
     public function aboutTrainer($id)
     {
-        $trainer = User::where('role_id', 2)->find($id);
+        $trainer = User::where('role_id', 1)->find($id);
 
         if (!$trainer) {
             return response()->json(['message' => 'Trainer not found'], 404);

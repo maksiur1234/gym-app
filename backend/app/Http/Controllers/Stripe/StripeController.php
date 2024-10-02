@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Stripe;
 
 use App\Http\Controllers\Controller;
+use App\Models\User\UserTrainingPlan;
 use Illuminate\Http\Request;
 
 class StripeController extends Controller
@@ -39,8 +40,16 @@ class StripeController extends Controller
 
         return redirect()->away($session->url);
     }
-    public function success()
+    public function success(Request $request)
     {
+//        $userId = auth()->id();
+//        $trainingPlanId = $request->input('training_plan_id');
+//
+//        UserTrainingPlan::create([
+//            'user_id' => $userId,
+//            'training_plan_id' => $trainingPlanId,
+//        ]);
+
         return view('stripe.index');
     }
 }

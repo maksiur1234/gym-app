@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center items-center min-h-screen bg-gray-100">
+    <div class="flex justify-center items-center min-h-screen bg-gray-800">
         <Card class="shadow-lg h-auto w-1/2 max-w-md p-6">
             <template #header>
                 <div class="flex justify-center mb-4">
