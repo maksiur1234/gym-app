@@ -9,6 +9,6 @@ class TrainerRepository implements TrainerRepositoryInterface
 {
     public function all(int $page)
     {
-        return User::where('role_id', 1)->paginate($page); //role_id 1 is trainer
+        return User::where('role_id', 2)->paginate($page); //role_id 2 is trainer
     }
 }

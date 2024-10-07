@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(row, rowIndex) in rows[index]" :key="rowIndex" class="border-b">
-                    <td class="p-2"><InputText v-model="row.name" class="w-full" /></td>
+                    <td class="p-2"><InputText v-model="row.exercise_name" class="w-full" /></td>
                     <td class="p-2"><InputText v-model="row.sets" class="w-full" /></td>
                     <td class="p-2"><InputText v-model="row.reps" class="w-full" /></td>
                     <td class="p-2"><InputText v-model="row.rir" class="w-full" /></td>
@@ -50,7 +50,7 @@ const addRow = (dayIndex) => {
         rows.value[dayIndex] = [];
     }
     rows.value[dayIndex].push({
-        name: '',
+        exercise_name: '',
         sets: '',
         reps: '',
         rir: '',

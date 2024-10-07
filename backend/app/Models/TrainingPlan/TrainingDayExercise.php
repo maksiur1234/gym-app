@@ -14,7 +14,7 @@ class TrainingDayExercise extends Model
 
     protected $fillable = [
         'training_day_id',
-        'exercise_id',
+        'exercise_name',
         'sets',
         'reps',
         'rir',
@@ -25,9 +25,5 @@ class TrainingDayExercise extends Model
     public function trainingDay()
     {
         return $this->belongsTo(TrainingDay::class);
-    }
-    public function exercise()
-    {
-        $this->belongsTo(Exercise::class);
     }
 }

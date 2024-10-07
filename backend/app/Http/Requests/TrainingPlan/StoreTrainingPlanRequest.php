@@ -29,7 +29,7 @@ class StoreTrainingPlanRequest extends FormRequest
             'trainingDays' => 'required|numeric|min:1',
             'rows' => 'required|array',
             'rows.*' => 'array',
-            'rows.*.*.name' => 'required|string',
+            'rows.*.*.exercise_name' => 'required|string',
             'rows.*.*.sets' => 'required|numeric',
             'rows.*.*.reps' => 'required|numeric',
             'rows.*.*.rir' => 'required|numeric',

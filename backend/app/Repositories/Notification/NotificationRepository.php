@@ -22,6 +22,6 @@ class NotificationRepository implements NotificationRepositoryInterface
 
     public function getTrainerById(int $trainerId)
     {
-        return DB::table('users')->where('id', $trainerId)->where('role_id', 1)->first();
+        return DB::table('users')->where('id', $trainerId)->where('role_id', 2)->first();
     }
 }

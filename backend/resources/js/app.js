@@ -21,6 +21,7 @@ import Profile from "@/layouts/trainers/Profile.vue";
 import AllNotifications from "@/layouts/notification/AllNotifications.vue";
 import GlobalList from "@/layouts/trainingPlans/GlobalList.vue";
 import SkillTree from './layouts/skill-tree/SkillTree.vue';
+import Chat from './layouts/Message/Chat.vue';
 import Dialog from 'primevue/dialog';
 import theme from 'tailwindcss/defaultTheme';
 
@@ -90,6 +91,7 @@ app.component('schedule-component', Schedule);
 app.component('trainer-profile-component', Profile);
 app.component('notifications-component', AllNotifications);
 app.component('skill-tree-component', SkillTree);
+app.component('chat-component', Chat);
 
 app.component('Panel', Panel);
 app.component('Button', Button);

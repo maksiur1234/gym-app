@@ -48,21 +48,15 @@ class TrainingPlanService implements TrainingPlanServiceInterface
 
             if (isset($data['rows'][$dayIndex])) {
                 foreach ($data['rows'][$dayIndex] as $exerciseData) {
-                    $exercise = $this->exerciseRepo->findByName($exerciseData['name']);
-
-                    if ($exercise) {
                         $this->trainingDayExerciseRepo->create([
                             'training_day_id' => $trainingDay->id,
-                            'exercise_id' => $exercise->id,
+                            'exercise_name' => $exerciseData['exercise_name'],
                             'sets' => $exerciseData['sets'],
                             'reps' => $exerciseData['reps'],
                             'rir' => $exerciseData['rir'],
                             'tempo' => $exerciseData['tempo'],
                             'break' => $exerciseData['break'],
                         ]);
-                    } else {
-                        throw new \Exception('Exercise not found: ' . $exerciseData['name']);
-                    }
                 }
             } else {
                 throw new \Exception('No exercises provided for day ' . $dayIndex);

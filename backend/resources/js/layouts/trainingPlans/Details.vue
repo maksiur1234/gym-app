@@ -35,7 +35,7 @@
                                     </thead>
                                     <tbody>
                                     <tr v-for="exercise in day.exercises" :key="exercise.id" class="border-b">
-                                        <td class="p-2 border">{{ exercise.exercise_id }}</td>
+                                        <td class="p-2 border">{{ exercise.exercise_name }}</td>
                                         <td class="p-2 border">{{ exercise.sets }}</td>
                                         <td class="p-2 border">{{ exercise.reps }}</td>
                                         <td class="p-2 border">{{ exercise.rir }}</td>

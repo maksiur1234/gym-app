@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Trainers\TrainerController;
 use App\Http\Controllers\Exercise\ExerciseController;
+use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Schedule\TrainingScheduleController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\SkillTree\SkillTreeController;
@@ -59,6 +60,10 @@ Route::middleware([
     Route::post('/send-notification', [NotificationController::class, 'store']);
     Route::get('/notifications', [NotificationController::class, 'view']);
     Route::get('/all-notifications', [NotificationController::class, 'index']);
+
+    Route::get('/chat/{user}', [MessageController::class, 'index'])->name('chat.show');
+    Route::post('/chat/store', [MessageController::class, 'store'])->name('chat.store');
+
 
     Route::get('/stripe', [StripeController::class, 'index'])->name('index');
     Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');

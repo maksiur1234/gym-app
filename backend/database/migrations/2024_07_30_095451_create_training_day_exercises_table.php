@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('training_day_exercises', function (Blueprint $table) {
             $table->id();
             $table->foreignId('training_day_id')->constrained()->onDelete('cascade');
-            $table->foreignId('exercise_id')->constrained()->onDelete('cascade');
+            $table->string('exercise_name');
             $table->integer('sets');
             $table->integer('reps');
             $table->integer('rir');
             $table->string('tempo');
-            $table->integer('break')->nullable();
+            $table->string('break');
             $table->timestamps();
         });
     }

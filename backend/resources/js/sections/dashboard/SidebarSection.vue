@@ -66,7 +66,7 @@
                     <span class="font-medium">Powiadomienia</span>
                   </a>
                 </li>
-                <li>
+                <!-- <li>
                   <a v-ripple href="/schedule" class="flex items-center cursor-pointer p-4 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
                     <i class="pi pi-calendar mr-2"></i>
                     <span class="font-medium">Harmonogram</span>
@@ -89,19 +89,19 @@
                           <i class="pi pi-book mr-2"></i>
                           <span class="font-medium">Dziennik treningowy</span>
                       </a>
-                  </li>
-                  <li>
+                  </li> -->
+                  <!-- <li>
                       <a v-ripple href="/skill-tree" class="flex items-center cursor-pointer p-4 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
                           <i class="pi pi-chart-line mr-2"></i>
                           <span class="font-medium">Drzewo rozwoju</span>
                       </a>
-                  </li>
-                  <li>
+                  </li> -->
+                  <!-- <li>
                       <a v-ripple href="/achivments" class="flex items-center cursor-pointer p-4 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
                           <i class="pi pi-star-fill mr-2"></i>
                           <span class="font-medium">Osiągnięcia</span>
                       </a>
-                  </li>
+                  </li> -->
               </ul>
             </li>
           </ul>

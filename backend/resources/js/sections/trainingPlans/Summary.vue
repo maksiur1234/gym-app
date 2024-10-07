@@ -42,7 +42,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="(row, rowIndex) in dayRows" :key="rowIndex" class="border-b">
-                        <td class="p-3">{{ row.name }}</td>
+                        <td class="p-3">{{ row.exercise_name }}</td>
                         <td class="p-3">{{ row.sets }}</td>
                         <td class="p-3">{{ row.reps }}</td>
                         <td class="p-3">{{ row.rir }}</td>
@@ -68,7 +68,7 @@
 import { inject } from 'vue';
 
 const selectedUser = inject('selectedUser');
-const name = inject('name');
+const exercise_name = inject('exercise_name');
 const desc = inject('desc');
 const planName = inject('planName');
 const planDesc = inject('planDesc');

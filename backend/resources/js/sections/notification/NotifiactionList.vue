@@ -1,12 +1,13 @@
 <template>
+  <h2>Twoje Powiadomienia</h2>
   <div class="notifications-container">
-    <h2>Twoje Powiadomienia</h2>
     <div v-if="loading">Ładowanie powiadomień...</div>
     <div v-if="error" class="error">{{ error }}</div>
     <ul v-if="!loading && !error">
       <li v-for="notification in notifications" :key="notification.id" class="notification-item">
         <p><strong>Data:</strong> {{ formatDate(notification.created_at) }}</p>
         <p><strong>Wiadomość:</strong> {{ notification.message }}</p>
+        <p><a :href="`/chat/${notification.trainer_id}`">Zobacz cały chat</a></p>
       </li>
     </ul>
     <div v-if="notifications.length === 0">Brak powiadomień.</div>
