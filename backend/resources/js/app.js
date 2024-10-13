@@ -18,11 +18,12 @@ import Register from "@/layouts/auth/Register.vue";
 import Details from "@/layouts/trainingPlans/Details.vue";
 import Schedule from "@/layouts/Schedule/Schedule.vue";
 import Profile from "@/layouts/trainers/Profile.vue";
-import AllNotifications from "@/layouts/notification/AllNotifications.vue";
 import GlobalList from "@/layouts/trainingPlans/GlobalList.vue";
 import SkillTree from './layouts/skill-tree/SkillTree.vue';
-import Chat from './layouts/Message/Chat.vue';
 import Dialog from 'primevue/dialog';
+import GlobalChat from './layouts/Chat/GlobalChat.vue';
+import List from './layouts/Chat/List.vue';
+import Chat from './layouts/Chat/Chat.vue';
 import theme from 'tailwindcss/defaultTheme';
 
 import Menubar from 'primevue/menubar';
@@ -89,9 +90,10 @@ app.component('register-component', Register);
 app.component('training-plan-details-component', Details);
 app.component('schedule-component', Schedule);
 app.component('trainer-profile-component', Profile);
-app.component('notifications-component', AllNotifications);
 app.component('skill-tree-component', SkillTree);
-app.component('chat-component', Chat);
+app.component('global-chat-component', GlobalChat);
+app.component('chats-list-component', List);
+app.component('private-chat-component', Chat);
 
 app.component('Panel', Panel);
 app.component('Button', Button);
