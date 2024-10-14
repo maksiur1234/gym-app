@@ -31,6 +31,7 @@ class GotMessage implements ShouldBroadcast
     {
         return [
             new PrivateChannel('channel-for-everyone'),
+            new PrivateChannel('private-channel.' . $this->message['user_id']),
         ];
     }
 }

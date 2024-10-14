@@ -11,8 +11,8 @@
 <div id="app" class="flex bg-slate-300 min-h-screen">
     <dashboard-component></dashboard-component>
 
-    <div class="flex-grow flex justify-center items-center">
-        <private-chat-component :trainerId="{{ json_encode($trainerId) }}"></private-chat-component>
+    <div class="flex-grow flex justify-center items-center"  data-user="{{ json_encode($user) }}">
+        <private-chat-component></private-chat-component>
     </div>
 </div>
 @vite('resources/js/app.js')

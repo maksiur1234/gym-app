@@ -32,6 +32,7 @@ class SendMessage implements ShouldQueue
             'user_id' => $this->message->user_id,
             'text' => $this->message->text,
             'time' => $this->message->time,
+            'receiver_id' => $this->message->receiver_id,
         ]);
     }
 }

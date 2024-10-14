@@ -63,7 +63,7 @@ const handleCollaboration = async (trainerId) => {
   try {
     
     // Przekierowanie do czatu
-    window.location.href = `/chat/private/${trainerId}`;
+    window.location.href = `/chat/${trainerId}`;
   } catch (error) {
     console.error('Błąd wysyłania powiadomienia:', error);
     alert('Nie udało się wysłać powiadomienia.');

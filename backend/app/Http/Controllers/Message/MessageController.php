@@ -3,25 +3,18 @@ namespace App\Http\Controllers\Message;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMessage;
-use App\Models\Message\Message;
 use App\Models\User\User;
+use App\Repositories\Message\MessageRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
-    public function view()
-    {
-        $user = User::where('id', auth()->id())->select([
-            'id', 'name', 'email',
-        ])->first();
+    protected $messageRepository;
 
-        return view('chat.global-chat', ['user' => $user]);
-    }
-
-    public function privateChat($trainerId)
+    public function __construct(MessageRepositoryInterface $messageRepository)
     {
-        return view('chat.private-chat', ['trainerId' => $trainerId]);
+        $this->messageRepository = $messageRepository;
     }
 
     public function index()
@@ -29,21 +22,41 @@ class MessageController extends Controller
         return view('chat.all-chats');
     }
 
+    public function view()
+    {
+        $user = User::where('id', auth()->id())->select(['id', 'name', 'email'])->first();
+        return view('chat.global-chat', ['user' => $user]);
+    }
+
+    public function viewPrivate()
+    {
+        $user = User::where('id', auth()->id())->select(['id', 'name', 'email'])->first();
+        return view('chat.private-chat', ['user' => $user]);
+    }
+
+    public function getActiveChats()
+    {
+        $userId = Auth::id();
+        $activeChats = $this->messageRepository->getUserActiveChats($userId);
+        return response()->json($activeChats);
+    }
+
+    public function getPrivateMessages($receiverId)
+    {
+        $authUserId = Auth::id();
+        $messages = $this->messageRepository->getPrivateMessages($authUserId, $receiverId);
+        return response()->json($messages);
+    }
+
     public function messages()
     {
-        $messages = Message::with('user')->get()->append('time');
-
+        $messages = $this->messageRepository->getGlobalMessages();
         return response()->json($messages);
     }
 
     public function message(Request $request)
     {
-        $message = Message::create([
-            'user_id' => $request->user_id,
-            'text' => $request->text,
-            'time' => now(),
-        ]);
-
+        $message = $this->messageRepository->sendMessage($request->only(['user_id', 'text', 'receiver_id']));
         SendMessage::dispatch($message);
 
         return response()->json([
