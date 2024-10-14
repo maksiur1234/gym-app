@@ -61,17 +61,15 @@ const handleCollaboration = async (trainerId) => {
   }
 
   try {
-    const response = await axios.post('/send-notification', {
-      userId: userId.value,
-      trainerId: trainerId,
-      message: 'Chciałbym nawiązać współpracę.'
-    });
-    alert('Powiadomienie zostało wysłane!');
+    
+    // Przekierowanie do czatu
+    window.location.href = `/chat/${trainerId}`;
   } catch (error) {
     console.error('Błąd wysyłania powiadomienia:', error);
     alert('Nie udało się wysłać powiadomienia.');
   }
 }
+
 
 onMounted(() => {
   fetchUserData();

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TrainingScheduleController extends Controller
 {
+    protected $trainingScheduleService;
     public function __construct(TrainingScheduleService $trainingScheduleService)
     {
         $this->trainingScheduleService = $trainingScheduleService;

@@ -57,13 +57,13 @@ Route::middleware([
     Route::post('/schedules', [TrainingScheduleController::class, 'store']);
     Route::delete('/schedules/{id}', [TrainingScheduleController::class, 'destroy']);
 
-    Route::post('/send-notification', [NotificationController::class, 'store']);
-    Route::get('/notifications', [NotificationController::class, 'view']);
-    Route::get('/all-notifications', [NotificationController::class, 'index']);
-
-    Route::get('/chat/{user}', [MessageController::class, 'index'])->name('chat.show');
-    Route::post('/chat/store', [MessageController::class, 'store'])->name('chat.store');
-
+    Route::get('/global-chat', [MessageController::class, 'view'])->name('chat.show');
+    Route::get('/all-chats', [MessageController::class, 'index']);
+    Route::get('/messages', [MessageController::class, 'messages'])->name('messages');
+    Route::post('/message', [MessageController::class, 'message'])->name('message');
+    Route::get('/chat/private/{receiverId}', [MessageController::class, 'getPrivateMessages'])->name('private.messages');
+    Route::get('/chat/{receiverId}', [MessageController::class, 'viewPrivate'])->name('private.chat');
+    Route::get('/chats', [MessageController::class, 'getActiveChats']);
 
     Route::get('/stripe', [StripeController::class, 'index'])->name('index');
     Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');

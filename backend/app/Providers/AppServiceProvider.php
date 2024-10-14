@@ -7,6 +7,8 @@ use App\Models\User\User;
 use App\Policies\User\UserPolicy;
 use App\Repositories\Exercise\ExerciseRepository;
 use App\Repositories\Exercise\ExerciseRepositoryInterface;
+use App\Repositories\Message\MessageRepository;
+use App\Repositories\Message\MessageRepositoryInterface;
 use App\Repositories\Trainer\TrainerRepository;
 use App\Repositories\Trainer\TrainerRepositoryInterface;
 use App\Repositories\TrainingPlan\ReadyTrainingPlanRepository;
@@ -56,6 +58,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
         $this->app->bind(ReadyTrainingPlanRepositoryInterface::class, ReadyTrainingPlanRepository::class);
         $this->app->bind(ReadyTrainingPlanServiceInterface::class, ReadyTrainingPlanService::class);
+        $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
     }
 
     /**
