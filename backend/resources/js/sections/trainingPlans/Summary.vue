@@ -2,7 +2,6 @@
     <div class="p-6 max-w-6xl mx-auto shadow-lg rounded-lg">
         <h2 class="text-2xl font-bold mb-6">Podsumowanie</h2>
 
-        <!-- User Information -->
         <div v-if="selectedUser" class="mb-8">
             <h2 class="text-2xl font-semibold mb-4">Szczegóły użytkownika</h2>
             <div class="flex items-center mb-6">
@@ -15,7 +14,6 @@
             </div>
         </div>
 
-        <!-- Training Plan Information -->
         <div class="mb-8">
             <h3 class="text-2xl font-semibold mb-4">Plan treningowy:</h3>
             <div class="p-4 rounded-lg border border-gray-300">
@@ -24,7 +22,6 @@
             </div>
         </div>
 
-        <!-- Training Units Summary -->
         <div class="mb-8">
             <h3 class="text-2xl font-semibold mb-4">Podsumowanie Jednostek Treningowych</h3>
             <div v-for="(dayRows, dayIndex) in rows" :key="dayIndex" class="mb-6">
@@ -54,7 +51,6 @@
             </div>
         </div>
 
-        <!-- Additional Information -->
         <div v-if="additionalInfo" class="mb-8">
             <h3 class="text-2xl font-semibold mb-4">Dodatkowe informacje:</h3>
             <div class="p-4 rounded-lg border">

@@ -7,6 +7,7 @@ use App\Repositories\TrainingPlan\TrainingDayRepositoryInterface;
 use App\Repositories\TrainingPlan\TrainingDayExerciseRepositoryInterface;
 use App\Repositories\User\UserTrainingPlanRepositoryInterface;
 use App\Repositories\Exercise\ExerciseRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class TrainingPlanService implements TrainingPlanServiceInterface
 {
@@ -65,6 +66,47 @@ class TrainingPlanService implements TrainingPlanServiceInterface
 
         $this->userTrainingPlanRepo->create([
             'user_id' => $data['user_id'],
+            'training_plan_id' => $trainingPlan->id,
+        ]);
+
+        return $trainingPlan;
+    }
+
+    public function createReadyTrainingPlan(array $data)
+    {
+        $trainingPlan = $this->trainingPlanRepo->create([
+            'name' => $data['planName'],
+            'desc' => $data['planDesc'],
+            'created_by' => Auth::user()->id,
+            'price' => $data['price'],
+        ]);
+        
+        // add training days and exercises
+        foreach (range(1, $data['trainingDays']) as $dayIndex) {
+            $trainingDay = $this->trainingDayRepo->create([
+                'training_plan_id' => $trainingPlan->id,
+                'day_name' => 'Dzień ' . $dayIndex,
+            ]);
+
+            if (isset($data['rows'][$dayIndex])) {
+                foreach ($data['rows'][$dayIndex] as $exerciseData) {
+                        $this->trainingDayExerciseRepo->create([
+                            'training_day_id' => $trainingDay->id,
+                            'exercise_name' => $exerciseData['exercise_name'],
+                            'sets' => $exerciseData['sets'],
+                            'reps' => $exerciseData['reps'],
+                            'rir' => $exerciseData['rir'],
+                            'tempo' => $exerciseData['tempo'],
+                            'break' => $exerciseData['break'],
+                        ]);
+                }
+            } else {
+                throw new \Exception('No exercises provided for day ' . $dayIndex);
+            }
+        }
+
+        $this->userTrainingPlanRepo->create([
+            'user_id' => Auth::user()->id,
             'training_plan_id' => $trainingPlan->id,
         ]);
 

@@ -27,7 +27,7 @@ const plans = ref([]);
 const fetchReadyPlans = async () => {
     try {
         const response = await axios.get('/ready-training-plans-data');
-        plans.value = response.data.data;
+        plans.value = response.data;
     } catch (error) {
         console.error(error);
     }

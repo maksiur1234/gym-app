@@ -16,7 +16,7 @@
       <template #footer>
         <div class="flex gap-4 mt-1">
           <Button as="a" label="Zobacz profil" :href="`/trainers/profile/${trainer.id}`" rel="noopener" class="mr-2" severity="secondary" />
-          <Button @click="() => handleCollaboration(trainer.id)" label="Nawiąż współpracę" class="mr-2"/>
+          <Button @click="() => handleCollaboration(trainer.id)" label="Napisz wiadomość" class="mr-2"/>
         </div>
       </template>
     </Card>

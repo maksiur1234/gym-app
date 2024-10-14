@@ -38,10 +38,14 @@ Route::middleware([
     Route::get('/training-plans', [TrainingPlanController::class, 'view']);
     Route::get('/new-training-plan', [TrainingPlanController::class, 'viewCreate'])->name('training-plans.create');
     Route::post('/store-training-plans', [TrainingPlanController::class, 'store']);
+    Route::post('/store-ready-training-plans', [TrainingPlanController::class, 'storeReady']);
     Route::get('/training-plan-details/{id}', [TrainingPlanController::class, 'show']);
     Route::get('/training-plan-details-data/{id}', [TrainingPlanController::class, 'details']);
     Route::post('/training-plan/{id}/set-default', [TrainingPlanController::class, 'setAsDefault']);
 
+    Route::get('/ready-training-plans', [ReadyTrainingPlanController::class, 'index']);
+    Route::get('/ready-training-plans-data', [ReadyTrainingPlanController::class, 'plans']);
+    
     Route::get('/trainers', [TrainerController::class, 'view']);
     Route::get('/all-trainers', [TrainerController::class, 'index']);
     Route::get('/trainers/profile/{id}', [TrainerController::class, 'showProfile']);

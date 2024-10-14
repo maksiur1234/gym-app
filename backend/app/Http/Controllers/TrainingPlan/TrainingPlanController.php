@@ -61,6 +61,24 @@ class TrainingPlanController extends Controller
         }
     }
 
+    public function storeReady(StoreTrainingPlanRequest $request)
+    {
+        $validatedData = $request->validated();
+
+        try {
+            $trainingPlan = $this->trainingPlanService->createReadyTrainingPlan($validatedData);
+
+            return response()->json([
+                'message' => 'Training plan created successfully!',
+                'trainingPlan' => $trainingPlan,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     public function show($id)
     {
         $trainingPlan = TrainingPlan::with('trainingDays.exercises')->find($id);

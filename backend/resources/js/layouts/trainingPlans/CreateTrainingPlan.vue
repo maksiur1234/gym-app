@@ -91,16 +91,14 @@ const planName = ref([]);
 const planDesc = ref([]);
 const additionalInfo = ref();
 const rows = ref({});
-const created_by = ref();
+const created_by = ref('3');
 const price = ref([]);
 
-// Handlers
 const handleUserChange = (user) => {
     selectedUser.value = user;
     isPublic.value = user === null;
 };
 
-// Provide the data
 provide('selectedUser', selectedUser);
 provide('isPublic', isPublic);
 provide('trainingDays', trainingDays);
@@ -121,6 +119,7 @@ const fetchCurrentUser = async () => {
 };
 const savePlan = async () => {
     try {
+        console.log(created_by.value, 'wartosc')
         const planData = {
             user_id: selectedUser.value ? selectedUser.value.id : null,
             created_by: created_by.value,

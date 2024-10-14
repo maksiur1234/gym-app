@@ -17,6 +17,7 @@ class TrainingPlan extends Model
         'desc',
         'created_by',
         'user_id',
+        'price'
     ];
 
     public function trainingDays()

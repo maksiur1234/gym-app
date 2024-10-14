@@ -129,11 +129,11 @@
                 <li>
                   <a
                     v-ripple
-                    href ='/resources'
+                    href ='/ready-training-plans'
                     class="flex items-center cursor-pointer p-4 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple"
                   >
                     <i class="pi pi-folder mr-2"></i>
-                    <span class="font-medium">Moje zasoby</span>
+                    <span class="font-medium">Gotowe plany treningowe</span>
                   </a>
                 </li>
                 <li>
