@@ -4,7 +4,6 @@
             <template #title>Hej rozpocznij trening klikając w przycisk!</template>
             <template #content>
                 <div class="main mb-2">
-                    <!-- Link do aktualnego planu treningowego -->
                     <Button
                         v-if="currentPlanId"
                         as="a"
@@ -14,10 +13,9 @@
                         rel="noopener"
                         class="rounded-lg bg-gradient-to-br from-primary-400 to-primary-700 active:from-primary-700 active:to-primary-900 text-white border-none px-6 py-3 font-bold hover:ring-2 cursor-pointer ring-offset-2 ring-offset-surface-0 dark:ring-offset-surface-900 ring-primary transition-all"
                     />
-                    <!-- Przycisk do rozpoczęcia lub zakończenia treningu -->
                     <Button
                         @click="toggleTraining"
-                        :label="isTrainingActive ? 'Zakończ trening' : 'Rozpocznij trening'"
+                        :label="isTrainingActive ? 'Anuluj trening' : 'Rozpocznij trening'"
                         class="ml-2 mb-4"
                     />
                     <CurrentTrainingCard v-if="isTrainingActive"/>
@@ -25,9 +23,9 @@
                 <div class="mb-2">
                     <BasicInfo />
                 </div>
-                <div class="mb-2">
+                <!-- <div class="mb-2">
                     <BasicSchedule />
-                </div>
+                </div> -->
                 <div class="mb-2">
                     <BasicStatistics />
                 </div>
@@ -62,7 +60,6 @@ const toggleTraining = async () => {
         try {
             await axios.post('/workout/end', {
                 session_id: currentSessionId.value,
-                total_sets: calculateTotalSets(), // Implementuj metodę do obliczenia całkowitej liczby serii
             });
             isTrainingActive.value = false;
         } catch (error) {
@@ -79,10 +76,6 @@ const toggleTraining = async () => {
             console.error('Error starting workout session:', error);
         }
     }
-};
-
-const calculateTotalSets = () => {
-    // Implementuj logikę obliczania całkowitej liczby serii
 };
 
 const currentSessionId = ref(null);

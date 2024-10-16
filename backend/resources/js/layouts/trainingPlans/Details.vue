@@ -9,14 +9,14 @@
         </template>
         <template #content>
             <div v-if="plan">
-                <div>
+                <div class="py-8">
                     <h3>Nazwa planu: {{ plan.name }}</h3>
                     <p>Opis: {{ plan.desc }}</p>
                     <p>Data utworzenia: {{ new Date(plan.created_at).toLocaleDateString() }}</p>
+                    <Button label="Pobierz do PDF" severity="warn" @click="exportToPDF"/>
                 </div>
-
+                
                 <div v-if="plan.training_days.length">
-                    <h3>Dni treningowe</h3>
                     <table class="w-full border-collapse border border-gray-200">
                         <tbody>
                         <tr v-for="day in plan.training_days" :key="day.id">
@@ -61,6 +61,45 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable'
+
+const exportToPDF = () => {
+    if (!plan.value || !plan.value.training_days) {
+        console.error('Brak danych do eksportu');
+        return;
+    }
+
+    const doc = new jsPDF();
+    
+    if (plan.value.name) {
+        doc.text(`Plan Treningowy: ${plan.value.name}`, 10, 10);
+    } else {
+        doc.text('Plan Treningowy: brak nazwy', 10, 10);
+    }
+
+    plan.value.training_days.forEach(day => {
+        if (day.day_name) {
+            doc.text(day.day_name, 10, doc.autoTable.previous?.finalY + 10 || 20);
+        }
+
+        doc.autoTable({
+            head: [['Nazwa cwiczenia', 'Ilosc serii', 'Ilosc powtorzen', 'RIR', 'Tempo', 'Przerwa']],
+            body: day.exercises.map(exercise => [
+                exercise.exercise_name || '', 
+                exercise.sets || '', 
+                exercise.reps || '', 
+                exercise.rir || '', 
+                exercise.tempo || '', 
+                exercise.break || ''
+            ]),
+            startY: doc.autoTable.previous?.finalY + 10 || 30,
+        });
+    });
+
+    doc.save(`plan_treningowy_${plan.value.name || 'brak_nazwy'}.pdf`);
+};
+
 
 const plan = ref(null);
 
@@ -85,14 +124,12 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Style for the main container of the details */
 .training-day {
     border: 1px solid #ddd;
     padding: 10px;
     margin-bottom: 10px;
 }
 
-/* Styles for table */
 table {
     border-collapse: collapse;
     width: 100%;
