@@ -3,30 +3,39 @@
     <Card>
       <template #title>
         <Button
-                as="a"
-                label="Wróć"
-                href="/all-chats"
-                rel="noopener"
-                class="rounded-lg bg-gradient-to-br from-blue-500 to-indigo-700 text-white font-bold py-2 px-4 hover:ring-2 cursor-pointer ring-offset-2 ring-blue-300 transition-all"
-            />
+          as="a"
+          label="Wróć"
+          href="/all-chats"
+          rel="noopener"
+          class="rounded-lg bg-gradient-to-br from-blue-500 to-indigo-700 text-white font-bold py-2 px-4 hover:ring-2 cursor-pointer ring-offset-2 ring-blue-300 transition-all"
+        />
       </template>
       <template #content>
-      <div class="chat-container">
-        <div class="messages">
-          <div 
-            v-for="(msg, index) in messages" 
-            :key="index" 
-            :class="{'message-sent': msg.user_id === userId, 'message-received': msg.user_id !== userId}"
-            class="message-item"
-          >
-            <strong>{{ msg.user_id }}</strong>: {{ msg.text }}
+        <div class="chat-container">
+          <div class="messages">
+            <div 
+              v-for="(msg, index) in messages" 
+              :key="index" 
+              :class="{'message-sent': msg.user_id === userId, 'message-received': msg.user_id !== userId}"
+              class="message-item"
+            >
+              <strong>{{ msg.user_id }}</strong>: {{ msg.text }}
+              <div v-if="msg.status === 'pending'">
+                <Button class="m-2" label="Akceptuj" @click="acceptRequest(msg.id)" />
+                <Button label="Odrzuć" @click="rejectRequest(msg.id)" severity="danger"/>
+              </div>
+            </div>
+          </div>
+          <div v-if="messages.some(msg => msg.status === 'accepted')">
+            <form class="form-container p-2" @submit.prevent="sendMessage">
+              <InputText v-model="newMessage" type="text" size="large" placeholder="Napisz wiadomość" />
+              <Button label="Wyślij wiadomość" type="submit" />
+            </form>
+          </div>
+          <div v-else>
+            <p>Nie możesz wysyłać wiadomości, czekaj na akceptację.</p>
           </div>
         </div>
-        <form class="form-container p-2">
-          <InputText v-model="newMessage" type="text" size="large" placeholder="Napisz wiadomość" />
-          <Button label="Wyślij wiadomość" @click="sendMessage"/>
-        </form>
-      </div>
       </template>
     </Card>
   </div>
@@ -86,6 +95,30 @@ const sendMessage = async () => {
   newMessage.value = ''; 
 };
 
+const acceptRequest = async (messageId) => {
+  const csrfToken = await getCsrfToken(); 
+
+  await fetch(`/accept-message/${messageId}`, {
+     method: 'POST',
+     headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken, 
+      },
+    });
+};
+
+const rejectRequest = async (messageId) => {
+  const csrfToken = await getCsrfToken(); 
+
+  await fetch(`/reject-message/${messageId}`, { 
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken, 
+      },
+  });
+};
+
 onMounted(() => {
   const userData = document.querySelector('.flex-grow').getAttribute('data-user');
   userId.value = JSON.parse(userData).id; 
@@ -97,6 +130,7 @@ onMounted(() => {
   listenForMessages();
 });
 </script>
+
 
 <style scoped>
 .chat-container {

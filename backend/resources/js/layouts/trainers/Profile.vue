@@ -84,7 +84,7 @@ const listenForMessages = () => {
         window.Echo.private('private-channel.' + userId.value)
             .listen('GotMessage', (event) => {
                 messages.value.push(event.message);
-            });
+            })
     }
 };
 
@@ -100,6 +100,7 @@ const sendMessage = async () => {
         receiver_id: receiverId.value,
         text: newMessage.value,
         time: new Date().toLocaleTimeString(),
+        status: 'pending'
     };
 
     const csrfToken = await getCsrfToken();

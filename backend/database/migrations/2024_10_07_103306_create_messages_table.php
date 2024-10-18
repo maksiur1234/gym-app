@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
             $table->foreignId('receiver_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->text('text')->nullable();
+            $table->string('status')->nullable()->default('pending');
             $table->timestamps();
         });
     }

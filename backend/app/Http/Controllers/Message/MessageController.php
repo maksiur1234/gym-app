@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Message;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMessage;
+use App\Models\Message\Message;
 use App\Models\User\User;
 use App\Repositories\Message\MessageRepositoryInterface;
 use Illuminate\Http\Request;
@@ -64,4 +65,26 @@ class MessageController extends Controller
             'message' => "Message created and job dispatched.",
         ]);
     }
+
+    public function acceptRequest($messageId)
+    {
+        $message = Message::find($messageId);
+        $message->status = 'accepted';
+        $message->save();
+
+        broadcast(new SendMessage($message));
+
+        return response()->json(['status' => 'accepted']);
+    }
+
+public function rejectRequest($messageId)
+{
+    $message = Message::find($messageId);
+    $message->status = 'rejected';
+    $message->save();
+
+    broadcast(new SendMessage($message));
+
+    return response()->json(['status' => 'rejected']);
+}
 }

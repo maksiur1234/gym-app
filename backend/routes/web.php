@@ -68,6 +68,8 @@ Route::middleware([
     Route::get('/chat/private/{receiverId}', [MessageController::class, 'getPrivateMessages'])->name('private.messages');
     Route::get('/chat/{receiverId}', [MessageController::class, 'viewPrivate'])->name('private.chat');
     Route::get('/chats', [MessageController::class, 'getActiveChats']);
+    Route::post('/accept-message/{id}', [MessageController::class, 'acceptRequest'])->name('accept-message');
+    Route::post('/reject-message/{id}', [MessageController::class, 'rejectRequest'])->name('reject-message');
 
     Route::get('/stripe', [StripeController::class, 'index'])->name('index');
     Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
