@@ -20,20 +20,23 @@
               class="message-item"
             >
               <strong>{{ msg.user_id }}</strong>: {{ msg.text }}
-              <div v-if="msg.status === 'pending'">
+              <div v-if="msg.status === 'pending' && msg.receiver_id === userId">
                 <Button class="m-2" label="Akceptuj" @click="acceptRequest(msg.id)" />
                 <Button label="Odrzuć" @click="rejectRequest(msg.id)" severity="danger"/>
               </div>
             </div>
           </div>
-          <div v-if="messages.some(msg => msg.status === 'accepted')">
+          <div class="message-info p-4" v-if="messages.every(msg => msg.status === 'pending')">
+            <p>Aby napisać wiadomość, prośba musi zostać zaakceptowana.</p>
+          </div>
+          <div class="message-info p-4" v-if="messages.every(msg => msg.status === 'rejected')">
+            <p>Prośba została odrzucona.</p>
+          </div>
+          <div v-else-if="messages.some(msg => msg.status === 'accepted')">
             <form class="form-container p-2" @submit.prevent="sendMessage">
               <InputText v-model="newMessage" type="text" size="large" placeholder="Napisz wiadomość" />
               <Button label="Wyślij wiadomość" type="submit" />
             </form>
-          </div>
-          <div v-else>
-            <p>Nie możesz wysyłać wiadomości, czekaj na akceptację.</p>
           </div>
         </div>
       </template>
@@ -201,5 +204,9 @@ onMounted(() => {
 
 .btn:hover {
   background-color: #0056b3;
+}
+
+.message-info {
+  color:red;
 }
 </style>
