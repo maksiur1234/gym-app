@@ -25,7 +25,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    Route::get('/fetch-user-data', [UserController::class, 'index'])->name('dashboard');
+    Route::get('/fetch-user-data', [UserController::class, 'index'])->name('user-data');
     Route::get('/all-users', [UserController::class, 'all']);
     Route::get('/users', [UserController::class, 'view']);
     Route::put('/update-user/{id}', [UserController::class, 'update']);

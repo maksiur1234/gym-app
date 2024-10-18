@@ -13,7 +13,9 @@
                                 ]"
                             >
                                 <i class="pi pi-user" />
+                                
                             </span>
+                            <span class="text-center mt-2 font-semibold"v-if="value <= activeStep">Konto</span>
                         </button>
                         <Divider />
                     </div>
@@ -29,6 +31,7 @@
                             >
                                 <i class="pi pi-info" />
                             </span>
+                            <span class="text-center mt-2 font-semibold"v-if="value <= activeStep">Dane personalne</span>
                         </button>
                         <Divider />
                     </div>
@@ -44,6 +47,8 @@
                             >
                                 <i class="pi pi-star" />
                             </span>
+                            
+                            <span class="text-center mt-2 font-semibold"v-if="value <= activeStep">Doświadczenie</span>
                         </button>
                         <Divider />
                     </div>
@@ -59,6 +64,7 @@
                             >
                                 <i class="pi pi-id-card" />
                             </span>
+                            <span class="text-center mt-2 font-semibold"v-if="value <= activeStep">Podusumowanie</span>
                         </button>
                     </div>
                 </Step>
@@ -125,14 +131,24 @@
                 </StepPanel>
 
                 <StepPanel v-slot="{ activateCallback }" :value="4">
-                    <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
-                        <div class="text-center mt-4 mb-4 text-xl font-semibold">Zarejestruj się!</div>
-                        <div class="text-center">
-                            <img alt="logo" src="https://primefaces.org/cdn/primevue/images/stepper/content.svg" />
+                    <div class="flex flex-col gap-4 mx-auto" style="min-height: 16rem; max-width: 24rem">
+                        <div class="text-center mt-4 mb-4 text-xl font-semibold">Podsumowanie</div>
+                        <div class="border rounded-lg p-4 shadow-md">
+                            <ul class="list-none space-y-2">
+                                <li><strong>Imię:</strong> {{ userData.name }}</li>
+                                <li><strong>Nazwisko:</strong> {{ userData.surname }}</li>
+                                <li><strong>Email:</strong> {{ userData.email }}</li>
+                                <li><strong>Waga:</strong> {{ userData.weight }} kg</li>
+                                <li><strong>Wzrost:</strong> {{ userData.height }} cm</li>
+                                <li><strong>Wiek:</strong> {{ userData.age }} lat</li>
+                                <li><strong>Staż treningowy:</strong> {{ userData.training_intership }}</li>
+                                <li><strong>Opis:</strong> {{ userData.desc }}</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="flex pt-6 justify-start">
-                        <Button label="Zarejestruj" icon="pi pi-arrow-right" iconPos="right" @click="saveUser" />
+                    <div class="flex pt-6 justify-between">
+                        <Button label="Cofnij" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(3)" />
+                        <Button label="Zarejestruj się" icon="pi pi-arrow-right" iconPos="right" @click="saveUser" />
                     </div>
                 </StepPanel>
             </StepPanels>
@@ -157,11 +173,13 @@ const userData = ref({
     desc: '',
     role_id: 3,
 });
+
 const saveUser = async () => {
     try {
         console.log(userData.value);
         await axios.post('/register', userData.value);
 
+        window.location.href = '/dashboard';
     } catch (error) {
         console.error(error);
     }
@@ -170,7 +188,7 @@ const saveUser = async () => {
 const customBase64Uploader = async (event) => {
     const file = event.files[0];
     const reader = new FileReader();
-    let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
+    let blob = await fetch(file.objectURL).then((r) => r.blob()); 
 
     reader.readAsDataURL(blob);
 

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Trenuj z najlepszymi!</title>
     @vite('resources/css/app.css')
 </head>
@@ -10,7 +11,8 @@
 <div id="app" class="flex bg-slate-300 min-h-screen">
     <dashboard-component></dashboard-component>
     <div class="flex-grow flex justify-center items-center">
-        <trainer-profile-component :trainer-id="{{ $trainerId }}"></trainer-profile-component>
+        <trainer-profile-component :trainer-id="{{ $trainerId }}" :user="{{ json_encode($user) }}"></trainer-profile-component>
+    </div>
     </div>
 </div>
 @vite('resources/js/app.js')

@@ -33,7 +33,11 @@ class TrainerController extends Controller
 
     public function showProfile($id)
     {
-        return view('trainers.trainer-profile', ['trainerId' => $id]);
+        $user = User::where('id', auth()->id())->select(['id', 'name', 'email'])->first();
+        return view('trainers.trainer-profile', [
+            'trainerId' => $id,
+            'user' => $user,
+        ]);
     }
 
     public function aboutTrainer($id)

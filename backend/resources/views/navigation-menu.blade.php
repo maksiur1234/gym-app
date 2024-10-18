@@ -15,21 +15,6 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Strona Główna') }}
                     </x-nav-link>
-                    <x-nav-link href="{{ route('schedule') }}" :active="request()->routeIs('schedule')">
-                        {{ __('Harmonogram') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('statistics') }}" :active="request()->routeIs('statistics')">
-                        {{ __('Statystyki') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('trainers') }}" :active="request()->routeIs('trainers')">
-                        {{ __('Trenerzy') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('achivments') }}" :active="request()->routeIs('achivments')">
-                        {{ __('Osiągnięcia') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('test') }}" :active="request()->routeIs('test')">
-                        {{ __('test') }}
-                    </x-nav-link>
                      <!-- Search bar -->
                     <div class="relative flex items-center">
                         <input type="text" class="border border-gray-300 bg-white h-10 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Szukaj...">

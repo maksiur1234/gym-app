@@ -44,10 +44,11 @@
             <p v-else class="text-center text-gray-500 dark:text-gray-400">Loading...</p>
         </template>
         <template #footer>
-            <div class="mt-6 flex justify-end">
+            <div class="mt-6 flex justify-end message">
                 <Button
                     label="Wyślij prośbę o współpracę"
                     class="rounded-lg bg-green-500 text-white font-bold py-2 px-4 hover:bg-green-600 transition-all"
+                    @click="sendMessage"
                 />
             </div>
         </template>
@@ -59,8 +60,13 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 const props = defineProps({
-    trainerId: Number
+    trainerId: Number,
+    user: Object  
 });
+
+const newMessage = ref('Cześć, chcaiłbym nawiązać współprace'); 
+const userId = ref(props.user.id);  
+const receiverId = ref(null);
 
 const trainer = ref(null);
 
@@ -71,9 +77,61 @@ const fetchTrainer = async () => {
     } catch (error) {
         console.error('Error fetching trainer data:', error);
     }
-}
+};
+
+const listenForMessages = () => {
+    if (userId.value) {
+        window.Echo.private('private-channel.' + userId.value)
+            .listen('GotMessage', (event) => {
+                messages.value.push(event.message);
+            });
+    }
+};
+
+const getCsrfToken = async () => {
+    await axios.get('/sanctum/csrf-cookie'); 
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    return token;
+};
+
+const sendMessage = async () => {
+    const message = {
+        user_id: userId.value,
+        receiver_id: receiverId.value,
+        text: newMessage.value,
+        time: new Date().toLocaleTimeString(),
+    };
+
+    const csrfToken = await getCsrfToken();
+
+    try {
+        const response = await fetch('/message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            body: JSON.stringify(message),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json(); 
+            console.error('Error sending message:', errorData);
+        } else {
+            const responseData = await response.json();
+            console.log('Message sent successfully:', responseData);
+        }
+    } catch (error) {
+        console.error('Error while sending message:', error);
+    }
+};
+
 
 onMounted(() => {
+    const urlParts = window.location.pathname.split('/');
+    receiverId.value = urlParts[urlParts.length - 1];  
+
+    listenForMessages();
     fetchTrainer();
 });
 </script>
