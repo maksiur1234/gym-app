@@ -8,22 +8,10 @@
                 <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Harmonogram Treningów</h2>
                 <hr class="border-gray-300 mb-4" />
                 <label for="darkmode" class="flex items-center mb-2">
-                        <input id="darkmode" type="checkbox" v-model="isDark" class="mr-2" />
-                        <span class="text-gray-700 dark:text-gray-300">Tryb nocny</span>
-                    </label>
-                <div class="main mb-4 flex justify-center">
-                    
-                    <VDatePicker 
-                        :columns="columns" 
-                        v-model="date" 
-                        color="green" 
-                        mode="dateTime" 
-                        :select-attribute="selectAttribute" 
-                        :attributes='attributes' 
-                        :is-dark="isDark"
-                        class="w-full"
-                    />
-                </div>
+                    <input id="darkmode" type="checkbox" v-model="isDark" class="mr-2" />
+                    <span class="text-gray-700 dark:text-gray-300">Tryb nocny</span>
+                </label>
+
                 <div class="main mb-4">
                     <label for="trainingDay" class="block text-gray-700 dark:text-gray-300 mb-2">Wybierz dzień treningowy:</label>
                     <Select 
@@ -35,7 +23,27 @@
                         :highlightOnSelect="false" 
                         class="w-full md:w-56"
                     />
+                    <label for="trainingDay" class="block text-gray-700 dark:text-gray-300 mb-2">Jeżeli chcesz dodać ręcznie jednostkę treningową do dnia, wybierz konkretną jednostkę i dodaj do harmonogramu. Jeżeli chcesz dodać wiele jednostek treningowych jednego dnia tygodnia, zaznacz pole poniżej:</label>
+                    <Checkbox v-model="moreDays" inputId="moreDays" name="moreDays" value="moreDays" />
+                    <label for="moreDays" class="ml-2"> Dodaj wiele jednostek jednego dnia tygodnia </label>
                 </div>
+                <div class="main mb-4 flex justify-center">
+                    <VDatePicker 
+                        :columns="columns" 
+                        v-model="date" 
+                        color="green" 
+                        mode="dateTime" 
+                        :select-attribute="selectAttribute" 
+                        :attributes='attributes' 
+                        :is-dark="isDark"
+                        class="w-full"
+                    />
+                </div>
+                <div v-if="moreDays" class="main mb-4">
+                    <label for="numberOfUnits" class="block text-gray-700 dark:text-gray-300 mb-2">Ilość jednostek do dodania:</label>
+                    <InputNumber v-model="numberOfUnits" min="1" class="w-full md:w-56" />
+                </div>
+
                 <div class="main mb-4 text-center">
                     <Button 
                         label="Dodaj do harmonogramu" 
@@ -52,6 +60,7 @@
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useScreens } from 'vue-screen-utils'
+import Checkbox from 'primevue/checkbox';
 
 const { mapCurrent } = useScreens({ xs: '0px', sm: '640px', md: '768px', lg: '1024px' });
 const columns = mapCurrent({ lg: 2 }, 1);
@@ -61,8 +70,21 @@ const selectAttribute = ref({ dot: true });
 const plan = ref({});
 const planId = ref(null);
 const selectedTrainingDay = ref(null);
+const selectedWeekDay = ref(null);
+const numberOfUnits = ref(1);
 const schedule = ref();
 const isDark = ref(true);
+const moreDays = ref(false);
+
+const weekDays = [
+    { name: 'Poniedziałek', value: 1 },
+    { name: 'Wtorek', value: 2 },
+    { name: 'Środa', value: 3 },
+    { name: 'Czwartek', value: 4 },
+    { name: 'Piątek', value: 5 },
+    { name: 'Sobota', value: 6 },
+    { name: 'Niedziela', value: 0 }
+];
 
 const getScheduleData = async () => {
     try {
@@ -108,24 +130,52 @@ const formatDate = (date) => {
 
 const addToSchedule = async () => {
     try {
-        const formattedDate = formatDate(date.value);
-        
-        const existingSchedule = schedule.value.find(item => {
-            const scheduledDate = new Date(item.scheduled_date).toISOString().split('T')[0];
-            return item.training_day_id === selectedTrainingDay.value.id && scheduledDate === formattedDate.split(' ')[0];
-        });
+        const selectedDay = new Date(date.value);
 
-        if (existingSchedule) {
-            alert('Ten dzień treningowy został już dodany do harmonogramu.');
-            return; 
+        if (moreDays.value) {
+            for (let i = 0; i < numberOfUnits.value; i++) {
+
+                const scheduledDate = new Date(selectedDay);
+                scheduledDate.setDate(selectedDay.getDate() + (i * 7)); 
+
+                const formattedDate = formatDate(scheduledDate);
+
+                const existingSchedule = schedule.value.find(item => {
+                    const scheduledDateISO = new Date(item.scheduled_date).toISOString().split('T')[0];
+                    return item.training_day_id === selectedTrainingDay.value.id && scheduledDateISO === formattedDate.split(' ')[0];
+                });
+
+                if (existingSchedule) {
+                    alert(`Jednostka treningowa dla ${selectedTrainingDay.value.day_name} w dniu ${formattedDate.split(' ')[0]} została już dodana.`);
+                    continue; 
+                }
+
+                await axios.post('/training-schedule', {
+                    training_day_id: selectedTrainingDay.value.id,
+                    scheduled_date: formattedDate,
+                });
+            }
+            alert('Jednostki treningowe zostały dodane do harmonogramu.');
+        } else {
+            const formattedDate = formatDate(selectedDay);
+
+            const existingSchedule = schedule.value.find(item => {
+                const scheduledDateISO = new Date(item.scheduled_date).toISOString().split('T')[0];
+                return item.training_day_id === selectedTrainingDay.value.id && scheduledDateISO === formattedDate.split(' ')[0];
+            });
+
+            if (existingSchedule) {
+                alert('Ten dzień treningowy został już dodany do harmonogramu.');
+                return; 
+            }
+
+            const response = await axios.post('/training-schedule', {
+                training_day_id: selectedTrainingDay.value.id,
+                scheduled_date: formattedDate,
+            });
+
+            alert(response.data.message);
         }
-
-        const response = await axios.post('/training-schedule', {
-            training_day_id: selectedTrainingDay.value.id,
-            scheduled_date: formattedDate,
-        });
-
-        alert(response.data.message);
     } catch (error) {
         if (error.response && error.response.status === 422) {
             alert(error.response.data.message);
@@ -134,6 +184,7 @@ const addToSchedule = async () => {
         }
     }
 };
+
 
 const fetchPlanDetails = async () => {
     try {
