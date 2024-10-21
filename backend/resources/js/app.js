@@ -66,6 +66,9 @@ import Tag from 'primevue/tag';
 import Checkbox from 'primevue/checkbox';
 import OrganizationChart from 'primevue/organizationchart';
 
+import { setupCalendar, Calendar, DatePicker } from 'v-calendar';
+import 'v-calendar/style.css';
+
 const app = createApp({});
 
 app.use(PrimeVue, {
@@ -73,6 +76,11 @@ app.use(PrimeVue, {
         preset: Aura
     }
 });
+
+app.use(setupCalendar, {})
+
+app.component('VCalendar', Calendar)
+app.component('VDatePicker', DatePicker)
 
 app.component('main-component', Main);
 app.component('header-component', Header);

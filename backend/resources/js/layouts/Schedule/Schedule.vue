@@ -10,13 +10,15 @@
                 </div>
                 <hr>
                 <div class="main mb-2">
-                    <vue-cal
-                        :style="calendarStyle"
-                        :events="events"
-                        :time="time"
-                        :week-start="1"
-                        :locale="locale"
-                    ></vue-cal>
+                    <VDatePicker v-model="date" mode="dateTime" :select-attribute="selectAttribute"/>
+                </div>
+                <div class="main mb-2">
+                    <label for="trainingDay">Wybierz dzień treningowy:</label>
+                    <Select v-model="selectedTrainingDay" :options="plan.training_days"  optionLabel="day_name" placeholder="Wybierz jednostke treningową" checkmark :highlightOnSelect="false" class="w-full md:w-56" />
+                </div>
+                <div class="main mb-2">
+                    {{ date }}
+                    <Button label="Dodaj do harmonogramu" @click="addToSchedule"/>
                 </div>
             </template>
         </Card>
@@ -24,84 +26,46 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
-import VueCal from 'vue-cal';
-import 'vue-cal/dist/vuecal.css';
 
-const userId = ref(2);
-const trainingPlanId = ref('');
-const dayOfWeek = ref('');
-const startTime = ref('');
-const events = ref([]);
-const calendarStyle = ref({});
-const time = ref(new Date());
-const locale = ref('en');
+const date = ref(new Date());
+const selectAttribute = ref({ dot: true });
+const plan = ref({});
+const planId = ref(null);
+const selectedTrainingDay = ref(null);
 
-const formatEvents = (schedules) => {
-    return schedules.map(schedule => {
-        let startDate;
-        if (schedule.specific_date) {
-            startDate = new Date(schedule.specific_date + 'T' + schedule.start_time);
-        } else {
-            const dayMap = {
-                'monday': 1,
-                'tuesday': 2,
-                'wednesday': 3,
-                'thursday': 4,
-                'friday': 5,
-                'saturday': 6,
-                'sunday': 7
-            };
-            const today = new Date();
-            const diff = (dayMap[schedule.day_of_week] - today.getDay() + 7) % 7;
-            startDate = new Date(today.setDate(today.getDate() + diff) + 'T' + schedule.start_time);
-        }
-        return {
-            id: schedule.id,
-            start: startDate,
-            end: new Date(startDate.getTime() + 60 * 60 * 1000), // Zakładając, że każde wydarzenie trwa 1 godzinę
-            title: `Training Plan: ${schedule.training_plan.name}`,
-            description: schedule.training_plan.desc,
+const addToSchedule = async () => {
+    if (!selectedTrainingDay.value) {
+        alert("Wybierz dzień treningowy");
+        return;
+    }
+    
+    try {
+        const payload = {
+            date: date.value,
+            training_day_id: selectedTrainingDay.value
         };
-    });
-};
-
-const fetchSchedules = async () => {
-    try {
-        const response = await axios.get(`/schedules/${userId.value}`);
-        console.log('Fetched schedules:', response.data);
-        events.value = formatEvents(response.data);
+        alert(`Dodano do harmonogramu: ${selectedTrainingDay.value.day_name}`);
     } catch (error) {
-        console.error('Error fetching schedules:', error);
+        console.error('Error adding to schedule:', error);
     }
 };
 
-const addSchedule = async () => {
+const fetchPlanDetails = async () => {
     try {
-        await axios.post('/schedules', {
-            user_id: userId.value,
-            training_plan_id: trainingPlanId.value,
-            day_of_week: dayOfWeek.value,
-            start_time: startTime.value
-        });
-        fetchSchedules();
+        const currentPlan = await axios.get('/user/get-default-plan');
+        planId.value = currentPlan.data.id;
+        
+        const response = await axios.get(`/training-plan-details-data/${planId.value}`);
+        plan.value = response.data;
     } catch (error) {
-        console.error('Error adding schedule:', error);
-    }
-};
-
-const deleteSchedule = async (id) => {
-    try {
-        await axios.delete(`/api/schedules/${id}`);
-        fetchSchedules();
-    } catch (error) {
-        console.error('Error deleting schedule:', error);
+        console.error('Error fetching plan details:', error);
     }
 };
 
 onMounted(() => {
-    fetchSchedules();
+    fetchPlanDetails();
 });
 </script>
 
