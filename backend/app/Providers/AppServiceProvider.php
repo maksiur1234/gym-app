@@ -29,6 +29,8 @@ use App\Services\TrainingPlan\TrainingPlanService;
 use App\Services\TrainingPlan\TrainingPlanServiceInterface;
 use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Notification\NotificationRepositoryInterface;
+use App\Repositories\Schedule\TrainingScheduleRepository;
+use App\Repositories\Schedule\TrainingScheduleRepositoryInterface;
 use App\Services\Notification\NotificationService;
 use App\Services\Notification\NotificationServiceInterface;
 use Illuminate\Support\Facades\Gate;
@@ -54,11 +56,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TrainingDayExerciseRepositoryInterface::class, TrainingDayExerciseRepository::class);
         $this->app->bind(UserTrainingPlanRepositoryInterface::class, UserTrainingPlanRepository::class);
         $this->app->bind(TrainingPlanServiceInterface::class, TrainingPlanService::class);
-        $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
         $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
-        $this->app->bind(ReadyTrainingPlanRepositoryInterface::class, ReadyTrainingPlanRepository::class);
-        $this->app->bind(ReadyTrainingPlanServiceInterface::class, ReadyTrainingPlanService::class);
         $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
+        $this->app->bind(TrainingScheduleRepositoryInterface::class, TrainingScheduleRepository::class);
     }
 
     /**

@@ -13,16 +13,14 @@ return new class extends Migration
     {
         Schema::create('training_schedules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('training_plan_id');
-            $table->enum('type', ['daily', 'specific']);
-            $table->enum('day_of_week', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])->nullable();
-            $table->date('specific_date')->nullable();
-            $table->time('start_time');
-            $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('training_plan_id')->references('id')->on('training_plans')->onDelete('cascade');
+            $table->foreignId('user_id')
+                  ->constrained()
+                  ->onDelete('cascade');
+            $table->foreignId('training_day_id') 
+                  ->constrained()
+                  ->onDelete('cascade');
+            $table->date('scheduled_date'); 
+            $table->timestamps(); 
         });
     }
 

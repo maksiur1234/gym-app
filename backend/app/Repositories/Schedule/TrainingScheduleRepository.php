@@ -3,21 +3,21 @@
 namespace App\Repositories\Schedule;
 
 use App\Models\Schedule\TrainingSchedule;
+use Carbon\Carbon;
 
-class TrainingScheduleRepository
+class TrainingScheduleRepository implements TrainingScheduleRepositoryInterface
 {
-    public function create(array $data)
+    public function addTrainingDayToSchedule($userId, $trainingDayId, $scheduledDate)
     {
-        return TrainingSchedule::create($data);
+        return TrainingSchedule::create([
+            'user_id' => $userId,
+            'training_day_id' => $trainingDayId,
+            'scheduled_date' => Carbon::parse($scheduledDate)->format('Y-m-d H:i:s'),
+        ]);
     }
 
-    public function getSchedulesForUser($userId)
+    public function getTrainingSchedulesForUser($userId)
     {
-        return TrainingSchedule::where('user_id', $userId)->with('trainingPlan')->get();
-    }
-
-    public function delete($id)
-    {
-        return TrainingSchedule::destroy($id);
+        return TrainingSchedule::where('user_id', $userId)->get();
     }
 }

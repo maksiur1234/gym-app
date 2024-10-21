@@ -35,22 +35,35 @@ const plan = ref({});
 const planId = ref(null);
 const selectedTrainingDay = ref(null);
 
+const formatDate = (date) => {
+    const d = new Date(date);
+    return d.getFullYear() + '-' +
+           ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+           ('0' + d.getDate()).slice(-2) + ' ' +
+           ('0' + d.getHours()).slice(-2) + ':' +
+           ('0' + d.getMinutes()).slice(-2) + ':' +
+           ('0' + d.getSeconds()).slice(-2);
+}
+
 const addToSchedule = async () => {
-    if (!selectedTrainingDay.value) {
-        alert("Wybierz dzień treningowy");
-        return;
-    }
-    
     try {
-        const payload = {
-            date: date.value,
-            training_day_id: selectedTrainingDay.value
-        };
-        alert(`Dodano do harmonogramu: ${selectedTrainingDay.value.day_name}`);
+        const formattedDate = formatDate(date.value);
+        const response = await axios.post('/training-schedule', {
+            training_day_id: selectedTrainingDay.value.id,
+            scheduled_date: formattedDate,
+        });
+
+        alert(response.data.message);
     } catch (error) {
-        console.error('Error adding to schedule:', error);
+        if (error.response && error.response.status === 422) {
+            alert(error.response.data.message);
+        } else {
+            console.error('Error adding to schedule:', error);
+        }
     }
 };
+
+
 
 const fetchPlanDetails = async () => {
     try {

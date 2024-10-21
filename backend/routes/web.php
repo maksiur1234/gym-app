@@ -61,6 +61,8 @@ Route::middleware([
     Route::post('/schedules', [TrainingScheduleController::class, 'store']);
     Route::delete('/schedules/{id}', [TrainingScheduleController::class, 'destroy']);
 
+    Route::post('/training-schedule', [TrainingScheduleController::class, 'addToSchedule']);
+
     Route::get('/global-chat', [MessageController::class, 'view'])->name('chat.show');
     Route::get('/all-chats', [MessageController::class, 'index']);
     Route::get('/messages', [MessageController::class, 'messages'])->name('messages');

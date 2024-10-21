@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Schedule;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Schedule\StoreScheduleReqeuest;
+use App\Models\Schedule\TrainingSchedule;
 use App\Services\Schedule\TrainingScheduleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,25 +21,20 @@ class TrainingScheduleController extends Controller
     {
         return view('schedule.index');
     }
-    public function store(Request $request)
-    {
-        $user = Auth::user();
-        $data = $request->only(['training_plan_id', 'type', 'day_of_week', 'specific_date', 'start_time']);
 
-        $schedule = $this->trainingScheduleService->createSchedule($user->id, $data);
-        return response()->json($schedule);
-    }
-
-    public function index()
+    public function addToSchedule(StoreScheduleReqeuest $request)
     {
-        $user = Auth::user();
-        $schedules = $this->trainingScheduleService->getSchedules($user->id);
-        return response()->json($schedules);
-    }
+        try {
+            $userId = Auth::id();
+            $this->trainingScheduleService->addToSchedule(
+                $userId,
+                $request->training_day_id,
+                $request->scheduled_date
+            );
 
-    public function destroy($id)
-    {
-        $this->trainingScheduleService->deleteSchedule($id);
-        return response()->json(['message' => 'Schedule deleted successfully.']);
+            return response()->json(['message' => 'Day succesfully added to schedule.'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
     }
 }

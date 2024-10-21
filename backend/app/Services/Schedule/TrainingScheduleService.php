@@ -1,30 +1,29 @@
 <?php
+
 namespace App\Services\Schedule;
 
-use App\Repositories\Schedule\TrainingScheduleRepository;
+use App\Repositories\Schedule\TrainingScheduleRepositoryInterface;
 
 class TrainingScheduleService
 {
-    protected $trainingScheduleRepo;
+    protected $trainingScheduleRepository;
 
-    public function __construct(TrainingScheduleRepository $trainingScheduleRepo)
+    public function __construct(TrainingScheduleRepositoryInterface $trainingScheduleRepository)
     {
-        $this->trainingScheduleRepo = $trainingScheduleRepo;
+        $this->trainingScheduleRepository = $trainingScheduleRepository;
     }
 
-    public function createSchedule($userId, $data)
+    public function addToSchedule($userId, $trainingDayId, $scheduledDate)
     {
-        $data['user_id'] = $userId;
-        return $this->trainingScheduleRepo->create($data);
-    }
+        $existingSchedule = $this->trainingScheduleRepository->getTrainingSchedulesForUser($userId)
+            ->where('training_day_id', $trainingDayId)
+            ->where('scheduled_date', $scheduledDate)
+            ->first();
 
-    public function getSchedules($userId)
-    {
-        return $this->trainingScheduleRepo->getSchedulesForUser($userId);
-    }
+        if ($existingSchedule) {
+            throw new \Exception('This day is scheduled.');
+        }
 
-    public function deleteSchedule($id)
-    {
-        return $this->trainingScheduleRepo->delete($id);
+        return $this->trainingScheduleRepository->addTrainingDayToSchedule($userId, $trainingDayId, $scheduledDate);
     }
 }
