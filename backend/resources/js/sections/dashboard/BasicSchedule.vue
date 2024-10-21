@@ -1,92 +1,100 @@
+
 <template>
-    <div class="card" v-for="user in loggedUser" :key="user.id">
+    <div class="card">
         <Toast />
-        <Panel toggleable header="Harmonogram treningów">
-            <template #footer>
-                <div class="flex flex-wrap items-center justify-between gap-4">
-                    <div class="flex items-center gap-2">
-                        <Button icon="pi pi-user" rounded text></Button>
-                        <Button icon="pi pi-bookmark" severity="secondary" rounded text></Button>
-                    </div>
-                </div>
-            </template>
+        <Panel toggleable header="Harmonogram">
             <template #icons>
                 <Button icon="pi pi-cog" severity="secondary" rounded text @click="toggle" />
                 <Menu ref="menu" id="config_menu" :model="items" popup />
             </template>
-            <div class="p-4">
-                <ul class="list-disc pl-5">
-                    <li v-for="schedule in schedules" :key="schedule.id" class="mb-4">
-                        <h4 class="font-semibold">Trening Plan: {{ schedule.training_plan.name }}</h4>
-                        <p><strong>Opis:</strong> {{ schedule.training_plan.desc }}</p>
-                        <p><strong>Typ:</strong> {{ schedule.type === 'daily' ? 'Codzienny' : 'Specyficzny' }}</p>
-                        <p><strong>Data:</strong> {{ schedule.specific_date || 'Brak' }}</p>
-                        <p><strong>Dzień tygodnia:</strong> {{ translateDayOfWeek(schedule.day_of_week) || 'Brak' }}</p>
-                        <p><strong>Godzina:</strong> {{ schedule.start_time }}</p>
-                    </li>
-                </ul>
+            <div class="flex justify-center">
+                <VDatePicker 
+                        :columns="columns" 
+                        v-model="date" 
+                        color="green" 
+                        mode="dateTime" 
+                        :select-attribute="selectAttribute" 
+                        :attributes='attributes' 
+                        :is-dark="isDark"
+                        class="w-full"
+                    />
             </div>
         </Panel>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import { useScreens } from 'vue-screen-utils'
 
-const loggedUser = ref([]);
-const schedules = ref([]);
+const { mapCurrent } = useScreens({ xs: '0px', sm: '640px', md: '768px', lg: '1024px' });
+const columns = mapCurrent({ lg: 2 }, 1);
 
-const dayOfWeekMap = {
-    monday: 'Poniedziałek',
-    tuesday: 'Wtorek',
-    wednesday: 'Środa',
-    thursday: 'Czwartek',
-    friday: 'Piątek',
-    saturday: 'Sobota',
-    sunday: 'Niedziela'
-};
+const date = ref(new Date());
+const selectAttribute = ref({ dot: true });
+const plan = ref({});
+const planId = ref(null);
+const schedule = ref();
+const isDark = ref(true);
 
-const fetchUser = async () => {
+const getScheduleData = async () => {
     try {
-        const response = await axios.get('/fetch-user-data');
-        loggedUser.value = response.data;
+        const response = await axios.get('/schedule-data');
+        schedule.value = response.data;
+
+        attributes.value = schedule.value.map(item => {
+            const trainingDay = plan.value && plan.value.training_days 
+                ? plan.value.training_days.find(day => day.id === item.training_day_id) 
+                : null;
+
+            const trainingDayName = trainingDay ? trainingDay.day_name : 'Jednostka treningowa';
+
+            return {
+                highlight: true,
+                dates: [new Date(item.scheduled_date)],
+                dot: {
+                    color: 'blue', 
+                },
+                popover: {
+                    label: trainingDayName, 
+                }
+            };
+        });
+
+        console.log(schedule.value);
     } catch (error) {
         console.error(error);
     }
 };
 
-const fetchSchedules = async () => {
+const attributes = ref([]);
+
+
+const fetchPlanDetails = async () => {
     try {
-        const response = await axios.get(`/schedules/${loggedUser.value.id}`);
-        schedules.value = response.data;
+        const currentPlan = await axios.get('/user/get-default-plan');
+        planId.value = currentPlan.data.id;
+        
+        const response = await axios.get(`/training-plan-details-data/${planId.value}`);
+        plan.value = response.data;
     } catch (error) {
-        console.error('Error fetching schedules:', error);
+        console.error('Error fetching plan details:', error);
     }
 };
 
-const translateDayOfWeek = (day) => {
-    return dayOfWeekMap[day.toLowerCase()] || day;
-};
-
 onMounted(() => {
-    fetchUser();
-    fetchSchedules();
+    fetchPlanDetails();
+    getScheduleData();
 });
 </script>
 
-
 <style scoped>
-.p-panel {
-    background-color: rgb(34, 146, 79);
+.max-w-md {
+    max-width: 88rem;
 }
 
-ul {
-    list-style-type: disc;
-    padding-left: 20px;
-}
-
-li {
-    margin-bottom: 10px;
+.main {
+    min-width: 80rem;
 }
 </style>

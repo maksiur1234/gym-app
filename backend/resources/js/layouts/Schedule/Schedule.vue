@@ -4,13 +4,14 @@
             <template #content>
                 <div class="main mb-4 text-left">
                     <Button as="a" label="Wróć" href="/dashboard" rel="noopener" class="rounded-lg bg-gradient-to-br from-primary-400 to-primary-700 text-white px-6 py-3 font-bold transition-all hover:bg-opacity-90" />
-                </div>
-                <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Harmonogram Treningów</h2>
-                <hr class="border-gray-300 mb-4" />
-                <label for="darkmode" class="flex items-center mb-2">
+                    
+                <label for="darkmode" class="flex items-center mt-4">
                     <input id="darkmode" type="checkbox" v-model="isDark" class="mr-2" />
                     <span class="text-gray-700 dark:text-gray-300">Tryb nocny</span>
                 </label>
+                </div>
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Harmonogram Treningów</h2>
+                <hr class="border-gray-300 mb-4" />
 
                 <div class="main mb-4">
                     <label for="trainingDay" class="block text-gray-700 dark:text-gray-300 mb-2">Wybierz dzień treningowy:</label>
@@ -27,6 +28,7 @@
                     <Checkbox v-model="moreDays" inputId="moreDays" name="moreDays" value="moreDays" />
                     <label for="moreDays" class="ml-2"> Dodaj wiele jednostek jednego dnia tygodnia </label>
                 </div>
+                
                 <div class="main mb-4 flex justify-center">
                     <VDatePicker 
                         :columns="columns" 

@@ -23,9 +23,9 @@
                 <div class="mb-2">
                     <BasicInfo />
                 </div>
-                <!-- <div class="mb-2">
+                <div class="mb-2">
                     <BasicSchedule />
-                </div> -->
+                </div>
                 <div class="mb-2">
                     <BasicStatistics />
                 </div>

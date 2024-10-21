@@ -40,7 +40,4 @@ onMounted(() => {
 
 </script>
 <style scoped>
-.p-panel {
-    background-color: rgb(34, 146, 79);
-}
 </style>
