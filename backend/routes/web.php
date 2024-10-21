@@ -57,8 +57,7 @@ Route::middleware([
     Route::post('/user/set-default-plan', [UserTrainingPlanController::class, 'setDefaultTrainingPlan']);
 
     Route::get('/schedule', [TrainingScheduleController::class, 'view']);
-    Route::get('/schedules/{userId}', [TrainingScheduleController::class, 'index']);
-    Route::post('/schedules', [TrainingScheduleController::class, 'store']);
+    Route::get('/schedule-data', [TrainingScheduleController::class, 'getSchedule']);
     Route::delete('/schedules/{id}', [TrainingScheduleController::class, 'destroy']);
 
     Route::post('/training-schedule', [TrainingScheduleController::class, 'addToSchedule']);

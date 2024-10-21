@@ -26,4 +26,10 @@ class TrainingScheduleService
 
         return $this->trainingScheduleRepository->addTrainingDayToSchedule($userId, $trainingDayId, $scheduledDate);
     }
+
+    public function getSchedulesForUser($userId)
+    {
+        return $this->trainingScheduleRepository->getTrainingSchedulesForUser($userId);
+    }
+
 }

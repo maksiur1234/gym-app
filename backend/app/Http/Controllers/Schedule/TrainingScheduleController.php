@@ -37,4 +37,16 @@ class TrainingScheduleController extends Controller
             return response()->json(['error' => $e->getMessage()], 422);
         }
     }
+
+    public function getSchedule()
+    {
+        try {
+            $userId = Auth::id();
+            $schedules = $this->trainingScheduleService->getSchedulesForUser($userId);
+    
+            return response()->json($schedules, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
+    }
 }
