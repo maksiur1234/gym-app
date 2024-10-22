@@ -2,6 +2,8 @@ import '../css/app.css';
 import 'primeicons/primeicons.css'
 
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import Main from './layouts/welcome/Main.vue';
@@ -71,12 +73,15 @@ import 'v-calendar/style.css';
 
 const app = createApp({});
 
+const pinia = createPinia()
+
 app.use(PrimeVue, {
     theme: {
         preset: Aura
     }
 });
 
+app.use(pinia)
 app.use(setupCalendar, {})
 
 app.component('VCalendar', Calendar)
