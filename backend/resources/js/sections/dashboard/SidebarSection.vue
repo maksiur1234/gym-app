@@ -161,8 +161,8 @@
         <div class="mt-auto">
           <hr class="mb-4 mx-4 border-t border-0 border-surface-200 dark:border-surface-700" />
           <a v-ripple href="/user/profile" class="m-4 flex items-center cursor-pointer p-4 gap-2 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
-            <Avatar :image="loggedUser.profile_photo_url" shape="circle" />
-            <span class="font-bold">{{ loggedUser.name }}</span>
+            <Avatar :image="apiStore.user.profile_photo_url" shape="circle" />
+            <span class="font-bold">{{ apiStore.user.name }}</span>
           </a>
         </div>
           <div class="m-4 flex items-center cursor-pointer p-4 gap-2 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
@@ -174,12 +174,12 @@
   </template>
 
   <script setup>
-  import { onMounted, ref } from 'vue';
-  import axios from 'axios';
+  import { ref } from 'vue';
+  import { useApiStore } from '../../stores/apiStore';
 
   const isOpenAcc = ref(true);
   const isOpenFav = ref(true);
-  const loggedUser = ref([]);
+  const apiStore = useApiStore();
 
   const toggleFav = () => {
     isOpenFav.value = !isOpenFav.value;
@@ -188,15 +188,6 @@
   const toggleAcc = () => {
     isOpenAcc.value = !isOpenAcc.value;
   }
-
-  const fetchUser = async () => {
-    try {
-        const response = await axios.get('/fetch-user-data');
-        loggedUser.value = response.data.user;
-    } catch (error) {
-        console.error(error);
-    }
-};
 
   const logout = async () => {
       try {
@@ -217,10 +208,7 @@
           console.error('Error:', error);
       }
   }
-
-  onMounted(() => {
-    fetchUser()
-  })
+  apiStore.fetchUserData();
   </script>
 
   <style scoped>

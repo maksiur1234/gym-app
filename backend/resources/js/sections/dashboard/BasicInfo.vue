@@ -23,9 +23,9 @@
             </template>
             <p class="m-0">
                 <h1>Aktualny plan treningowy: </h1>
-                <div v-if="plan">
-                    <h2>{{ plan.name }}</h2>
-                    <p>{{ plan.desc }}</p>
+                <div v-if="apiStore.plan">
+                    <h2>{{ apiStore.plan.name }}</h2>
+                    <p>{{ apiStore.plan.desc }}</p>
                 </div>
             </p>
         </Panel>
@@ -36,25 +36,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { onMounted } from 'vue';
 import { useApiStore } from '../../stores/apiStore';
 
 const apiStore = useApiStore();
-const plan = ref(null);
-
-const fetchDefaultPlan = async () => {
-    try {
-        const response = await axios.get('/user/get-default-plan');
-        plan.value = response.data;
-        console.log(plan.value);
-    } catch (error) {
-        console.error('Error fetching default plan:', error);
-    }
-};
 
 onMounted(() => {
-  fetchDefaultPlan();
+  apiStore.fetchDefaultPlan();
   apiStore.fetchUserData();
 });
 

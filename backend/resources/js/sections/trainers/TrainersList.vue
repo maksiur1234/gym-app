@@ -26,20 +26,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useApiStore } from '../../stores/apiStore';
 
 const trainers = ref([]);
 const user = ref({});
 const userId = ref();
-
-const fetchUserData = async () => {
-  try {
-    const response = await axios.get('/fetch-user-data');
-    user.value = response.data;
-    userId.value = user.value.user.id;
-  } catch (error) {
-    console.error(error);
-  }
-};
+const apiStore = useApiStore();
 
 const fetchTrainers = async () => {
   try {
@@ -62,7 +54,6 @@ const handleCollaboration = async (trainerId) => {
 
   try {
     
-    // Przekierowanie do czatu
     window.location.href = `/chat/${trainerId}`;
   } catch (error) {
     console.error('Błąd wysyłania powiadomienia:', error);
@@ -72,7 +63,7 @@ const handleCollaboration = async (trainerId) => {
 
 
 onMounted(() => {
-  fetchUserData();
+  apiStore.fetchUserData();
   fetchTrainers();
 });
 </script>

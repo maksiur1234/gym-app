@@ -27,6 +27,7 @@
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useScreens } from 'vue-screen-utils'
+import { useApiStore } from '../../stores/apiStore';
 
 const { mapCurrent } = useScreens({ xs: '0px', sm: '640px', md: '768px', lg: '1024px' });
 const columns = mapCurrent({ lg: 2 }, 1);
@@ -34,9 +35,9 @@ const columns = mapCurrent({ lg: 2 }, 1);
 const date = ref(new Date());
 const selectAttribute = ref({ dot: true });
 const plan = ref({});
-const planId = ref(null);
 const schedule = ref();
 const isDark = ref(true);
+const apiStore = useApiStore();
 
 const getScheduleData = async () => {
     try {
@@ -61,8 +62,6 @@ const getScheduleData = async () => {
                 }
             };
         });
-
-        console.log(schedule.value);
     } catch (error) {
         console.error(error);
     }
@@ -70,21 +69,8 @@ const getScheduleData = async () => {
 
 const attributes = ref([]);
 
-
-const fetchPlanDetails = async () => {
-    try {
-        const currentPlan = await axios.get('/user/get-default-plan');
-        planId.value = currentPlan.data.id;
-        
-        const response = await axios.get(`/training-plan-details-data/${planId.value}`);
-        plan.value = response.data;
-    } catch (error) {
-        console.error('Error fetching plan details:', error);
-    }
-};
-
 onMounted(() => {
-    fetchPlanDetails();
+    apiStore.fetchDefaultPlan();
     getScheduleData();
 });
 </script>

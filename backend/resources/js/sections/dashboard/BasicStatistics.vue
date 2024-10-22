@@ -1,41 +1,32 @@
 
 <template>
-    <div class="card" v-for="user in loggedUser">
+    <div class="card">
         <Toast />
-        <Panel toggleable header="Podstawowe statystyki">
+        <Panel toggleable header="Podstawowe statystyki" v-if="apiStore.user">
             <template #icons>
                 <Button icon="pi pi-cog" severity="secondary" rounded text @click="toggle" />
                 <Menu ref="menu" id="config_menu" :model="items" popup />
             </template>
             <p class="m-0">
 
-                <p>Wiek: {{ user.age }}</p>
-                <p>Waga: {{ user.weight }}</p>
-                <p>Wzrost: {{ user.height }}</p>
-                <p>Staż treningowy: {{ user.training_intership }} lat</p>
+                <p>Wiek: {{ apiStore.user.age }}</p>
+                <p>Waga: {{ apiStore.user.weight }}</p>
+                <p>Wzrost: {{ apiStore.user.height }}</p>
+                <p>Staż treningowy: {{ apiStore.user.training_intership }} lat</p>
             </p>
+            
         </Panel>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { useApiStore } from '../../stores/apiStore';
 
-const loggedUser = ref([]);
-
-const fetchUser = async () => {
-    try {
-        const response = await axios.get('/fetch-user-data');
-        loggedUser.value = response.data;
-    } catch (error) {
-        console.error(error);
-    }
-
-};
+const apiStore = useApiStore();
 
 onMounted(() => {
-    fetchUser();
+    apiStore.fetchUserData();
 })
 
 </script>
