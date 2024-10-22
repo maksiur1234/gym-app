@@ -158,12 +158,15 @@
             </li>
           </ul>
         </div>
-        <div class="mt-auto">
+        <div class="mt-auto" v-if="apiStore.user">
           <hr class="mb-4 mx-4 border-t border-0 border-surface-200 dark:border-surface-700" />
           <a v-ripple href="/user/profile" class="m-4 flex items-center cursor-pointer p-4 gap-2 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
             <Avatar :image="apiStore.user.profile_photo_url" shape="circle" />
             <span class="font-bold">{{ apiStore.user.name }}</span>
           </a>
+        </div>
+        <div v-else>
+          <p>Ładowanie danych uzytkownika. Prosze czekać...</p>
         </div>
           <div class="m-4 flex items-center cursor-pointer p-4 gap-2 rounded text-surface-700 hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors p-ripple">
               <i class="pi pi-sign-out mr-2"></i>
@@ -174,7 +177,7 @@
   </template>
 
   <script setup>
-  import { ref } from 'vue';
+  import { onMounted, ref } from 'vue';
   import { useApiStore } from '../../stores/apiStore';
 
   const isOpenAcc = ref(true);
@@ -208,7 +211,9 @@
           console.error('Error:', error);
       }
   }
-  apiStore.fetchUserData();
+  onMounted(() => {
+    apiStore.fetchUserData();
+  })
   </script>
 
   <style scoped>

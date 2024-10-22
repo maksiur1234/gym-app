@@ -72,21 +72,10 @@ const selectAttribute = ref({ dot: true });
 const plan = ref({});
 const planId = ref(null);
 const selectedTrainingDay = ref(null);
-const selectedWeekDay = ref(null);
 const numberOfUnits = ref(1);
 const schedule = ref();
 const isDark = ref(true);
 const moreDays = ref(false);
-
-const weekDays = [
-    { name: 'Poniedziałek', value: 1 },
-    { name: 'Wtorek', value: 2 },
-    { name: 'Środa', value: 3 },
-    { name: 'Czwartek', value: 4 },
-    { name: 'Piątek', value: 5 },
-    { name: 'Sobota', value: 6 },
-    { name: 'Niedziela', value: 0 }
-];
 
 const getScheduleData = async () => {
     try {
@@ -112,7 +101,6 @@ const getScheduleData = async () => {
             };
         });
 
-        console.log(schedule.value);
     } catch (error) {
         console.error(error);
     }
