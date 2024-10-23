@@ -16,6 +16,10 @@
             </template>
             <template #content>
                 <div class="flex flex-col gap-4">
+                    <div v-if="generalError" class="text-red-600 text-center">
+                        {{ generalError }}
+                    </div>
+                    
                     <div class="flex flex-col gap-2">
                         <label for="email" class="font-medium">Email</label>
                         <InputText id="email" v-model="email" aria-describedby="email-help" class="p-2 border rounded" />
@@ -56,11 +60,13 @@ const errors = ref({
     email: '',
     password: ''
 });
+const generalError = ref('');
 
 const validateForm = () => {
     let valid = true;
     errors.value.email = '';
     errors.value.password = '';
+    generalError.value = '';  
 
     if (!email.value) {
         errors.value.email = 'Email jest wymagany.';
@@ -84,6 +90,7 @@ const handleSubmit = async () => {
             });
             window.location.href = '/dashboard';
         } catch (error) {
+            generalError.value = 'Niepoprawny email lub hasło. Spróbuj ponownie.';
             console.error('Błąd logowania:', error);
         }
     }

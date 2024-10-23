@@ -31,25 +31,40 @@
                     </div>
                     <div class="flex pt-6 justify-between">
                         <Button label="Cofnij" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
-                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('2')" />
+                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="validateStep1(activateCallback)" />
+                    </div>
+                    <div v-if="errors.length" class="text-red-500">
+                        <ul>
+                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                        </ul>
                     </div>
                 </StepPanel>
                 <StepPanel v-slot="{ activateCallback }" value="2">
                     <div class="flex flex-col h-48">
                         <Configuration />
                     </div>
+                    <div v-if="errors.length" class="text-red-500">
+                        <ul>
+                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                        </ul>
+                    </div>
                     <div class="flex pt-6 justify-between">
                         <Button label="Cofnij" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
-                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('3')" />
+                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="validateStep2(activateCallback)" />
                     </div>
                 </StepPanel>
                 <StepPanel v-slot="{ activateCallback }" value="3">
                     <div class="flex flex-col h-48">
                         <Creator />
                     </div>
+                    <div v-if="errors.length" class="text-red-500">
+                        <ul>
+                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                        </ul>
+                    </div>
                     <div class="flex pt-6 justify-between">
                         <Button label="Cofnij" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
-                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('4')" />
+                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="validateStep3(activateCallback)" />
                     </div>
                 </StepPanel>
                 <StepPanel v-slot="{ activateCallback }" value="4">
@@ -78,6 +93,7 @@
 <script setup>
 import { ref, provide, onMounted } from 'vue';
 import axios from 'axios';
+
 import Configuration from "@/sections/trainingPlans/Configuration.vue";
 import PickUser from "@/sections/trainingPlans/PickUser.vue";
 import Creator from "@/sections/trainingPlans/Creator.vue";
@@ -87,12 +103,13 @@ import Summary from "@/sections/trainingPlans/Summary.vue";
 const selectedUser = ref(null);
 const isPublic = ref(false);
 const trainingDays = ref([]);
-const planName = ref([]);
-const planDesc = ref([]);
-const additionalInfo = ref();
+const planName = ref('');
+const planDesc = ref('');
+const additionalInfo = ref('');
 const rows = ref({});
-const created_by = ref('3');
+const created_by = ref('');
 const price = ref([]);
+const errors = ref([]);
 
 const handleUserChange = (user) => {
     selectedUser.value = user;
@@ -108,18 +125,56 @@ provide('additionalInfo', additionalInfo);
 provide('rows', rows);
 provide('price', price);
 
-const fetchCurrentUser = async () => {
-    try {
-        const response = await axios.get('/fetch-user-data');
-        created_by.value = response.data.user.id;
-        console.log(created_by.value);
-    } catch (error) {
-        console.error('Error fetching users:', error);
+const validateStep1 = (activateCallback) => {
+    errors.value = [];
+    if (!selectedUser.value && !isPublic.value) {
+        errors.value.push('Wymagane jest wybranie użytkownika lub opcji tworzenia planu dla wszystkich');
+    }
+    if (errors.value.length === 0) {
+        activateCallback('2');
     }
 };
+
+const validateStep2 = (activateCallback) => {
+    errors.value = [];
+    if (planName.value.trim().length === 0) errors.value.push('Nazwa planu jest wymagana.');
+    if (planDesc.value.trim().length === 0) errors.value.push('Opis planu jest wymagany.');
+    if (trainingDays.value.length === 0) errors.value.push('Musi być dodana minimum jedna jednostka treningowa w treningu.');
+    
+    if (errors.value.length === 0) {
+        activateCallback('3');
+    }
+};
+
+const validateStep3 = (activateCallback) => {
+    errors.value = [];
+    
+    if (rows.value) {
+        for (const key in rows.value) {
+            if (Array.isArray(rows.value[key]) && rows.value[key].length > 0) {
+                rows.value[key].forEach((exercise, index) => {
+                    if (!exercise.exercise_name) errors.value.push(`Dzień ${key}, Ćwiczenie ${index + 1}: Nazwa ćwiczenia jest wymagana.`);
+                    if (!exercise.sets) errors.value.push(`Dzień ${key}, Ćwiczenie ${index + 1}: Ilość serii jest wymagana.`);
+                    if (!exercise.reps) errors.value.push(`Dzień ${key}, Ćwiczenie ${index + 1}: Ilość powtórzeń jest wymagana.`);
+                    if (!exercise.rir) errors.value.push(`Dzień ${key}, Ćwiczenie ${index + 1}: RIR jest wymagany.`);
+                    if (!exercise.tempo) errors.value.push(`Dzień ${key}, Ćwiczenie ${index + 1}: Tempo jest wymagane.`);
+                    if (!exercise.break) errors.value.push(`Dzień ${key}, Ćwiczenie ${index + 1}: Długość przerwy jest wymagana.`);
+                });
+            } else {
+                errors.value.push(`Dzień ${key}: Brak ćwiczeń do walidacji.`);
+            }
+        }
+    } else {
+        errors.value.push('Brak danych do walidacji.');
+    }
+
+    if (errors.value.length === 0) {
+        activateCallback('4');
+    }
+};
+
 const savePlan = async () => {
     try {
-        console.log(created_by.value, 'wartosc')
         const planData = {
             user_id: selectedUser.value ? selectedUser.value.id : null,
             created_by: created_by.value,
@@ -132,19 +187,21 @@ const savePlan = async () => {
             price: price.value,
         };
 
-        if (isPublic.value) {
-            await axios.post('/store-ready-training-plans', planData);
-        } else {
-            await axios.post('/store-training-plans', planData);
-        }
+        const url = isPublic.value ? '/store-ready-training-plans' : '/store-training-plans';
+        await axios.post(url, planData);
 
         alert('Plan został zapisany pomyślnie!');
+        window.location.href = 'training-plans';
     } catch (error) {
         console.error('Błąd podczas zapisywania planu:', error);
         alert('Wystąpił błąd podczas zapisywania planu.');
     }
 };
+
 onMounted(() => {
-    fetchCurrentUser();
-})
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData && userData.id) {
+        created_by.value = userData.id.toString();
+    }
+});
 </script>

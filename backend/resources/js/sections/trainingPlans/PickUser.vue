@@ -18,10 +18,27 @@
                     </div>
                 </template>
             </Listbox>
+
+            <div class="flex justify-between items-center mt-4">
+                <button
+                    @click="previousPage"
+                    :disabled="currentPage === 1"
+                    class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+                >
+                    Poprzednia
+                </button>
+                <span>Strona {{ currentPage }} z {{ totalPages }}</span>
+                <button
+                    @click="nextPage"
+                    :disabled="currentPage === totalPages"
+                    class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+                >
+                    Następna
+                </button>
+            </div>
         </div>
     </div>
 </template>
-
 
 <script setup>
 import { ref, onMounted, defineEmits } from 'vue';
@@ -32,10 +49,14 @@ const selectedUser = ref(null);
 const users = ref([]);
 const isPublic = ref(false);
 
+const currentPage = ref(1);
+const totalPages = ref(); 
+
 const fetchUsers = async () => {
     try {
-        const response = await axios.get('/all-users');
+        const response = await axios.get(`/all-users?page=${currentPage.value}`);
         users.value = response.data.data;
+        totalPages.value = response.data.meta.last_page; 
     } catch (error) {
         console.error('Error fetching users:', error);
     }
@@ -57,4 +78,17 @@ const onGlobalChange = () => {
     emit('update:isPublic', isPublic.value);
 };
 
+const previousPage = () => {
+    if (currentPage.value > 1) {
+        currentPage.value--;
+        fetchUsers();
+    }
+};
+
+const nextPage = () => {
+    if (currentPage.value < totalPages.value) {
+        currentPage.value++;
+        fetchUsers();
+    }
+};
 </script>

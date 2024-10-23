@@ -32,9 +32,6 @@
                 <Button label="Dodaj wiersz" @click="addRow(index)" class="bg-blue-500 text-white hover:bg-blue-600" />
             </div>
         </div>
-        <div class="card flex justify-center p-2">
-            <!-- Opcjonalnie, dodatkowa zawartość -->
-        </div>
     </div>
 </template>
 
