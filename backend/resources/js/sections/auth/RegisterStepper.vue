@@ -91,9 +91,14 @@
                         <div class="field">
                             <Password v-model="userData.password_confirmation" placeholder="Potwierdź hasło" fluid />
                         </div>
+                        <div v-if="errors.length" class="text-red-500">
+                            <ul>
+                                <li v-for="error in errors" :key="error">{{ error }}</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="flex pt-6 justify-end">
-                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback(2)" />
+                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="validateStep1(activateCallback)" />
                     </div>
                 </StepPanel>
                 <StepPanel v-slot="{ activateCallback }" :value="2">
@@ -108,10 +113,15 @@
                         <div class="field">
                             <InputText id="input" v-model="userData.age" type="email" placeholder="Wiek" fluid />
                         </div>
+                        <div v-if="errors.length" class="text-red-500">
+                            <ul>
+                                <li v-for="error in errors" :key="error">{{ error }}</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="flex pt-6 justify-between">
                         <Button label="Cofnij" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(1)" />
-                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback(3)" />
+                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="validateStep2(activateCallback)" />
                     </div>
                 </StepPanel>
                 <StepPanel v-slot="{ activateCallback }" :value="3">
@@ -123,10 +133,15 @@
                         <div class="field">
                             <InputText id="input" v-model="userData.desc" type="email" placeholder="Opisz swoje doświadczenie ile czasu trenujesz itp" fluid />
                         </div>
+                        <div v-if="errors.length" class="text-red-500">
+                            <ul>
+                                <li v-for="error in errors" :key="error">{{ error }}</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="flex pt-6 justify-between">
                         <Button label="Cofnij" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(2)" />
-                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback(4)" />
+                        <Button label="Dalej" icon="pi pi-arrow-right" iconPos="right" @click="validateStep3(activateCallback)" />
                     </div>
                 </StepPanel>
 
@@ -174,6 +189,63 @@ const userData = ref({
     role_id: 3,
 });
 
+const activeStep = ref(1);
+const errors = ref([]);
+
+const validateStep1 = (activateCallback) => {
+    errors.value = [];
+    if (!userData.value.name) errors.value.push('Imię jest wymagane.');
+    if (!userData.value.surname) errors.value.push('Nazwisko jest wymagane.');
+    if (!userData.value.email) errors.value.push('Email jest wymagany.');
+    if (!userData.value.password) errors.value.push('Hasło jest wymagane.');
+    if (userData.value.password !== userData.value.password_confirmation) errors.value.push('Hasła nie pasują.');
+    
+    if (errors.value.length === 0) {
+        activateCallback(2);
+    }
+};
+
+const validateStep2 = (activateCallback) => {
+    errors.value = [];
+
+    if (!userData.value.weight) {
+        errors.value.push('Waga jest wymagana.');
+    } else if (isNaN(userData.value.weight) || userData.value.weight <= 0) {
+        errors.value.push('Waga musi być dodatnią liczbą.');
+    }
+
+    if (!userData.value.height) {
+        errors.value.push('Wzrost jest wymagany.');
+    } else if (isNaN(userData.value.height) || userData.value.height <= 0) {
+        errors.value.push('Wzrost musi być dodatnią liczbą.');
+    }
+
+    if (!userData.value.age) {
+        errors.value.push('Wiek jest wymagany.');
+    } else if (isNaN(userData.value.age) || userData.value.age <= 0) {
+        errors.value.push('Wiek musi być dodatnią liczbą.');
+    }
+
+    if (errors.value.length === 0) {
+        activateCallback(3);
+    }
+};
+
+
+const validateStep3 = (activateCallback) => {
+    errors.value = [];
+    if (!userData.value.training_intership) {
+        errors.value.push('Doświadczenie treningowe jest wymagane.');
+    } else if (isNaN(userData.value.training_intership || userData.value.training_intership <= 0)) {
+        errors.value.push('Doświadczenie musi być liczbą.');
+    }
+    if (!userData.value.desc) errors.value.push('Opis doświadczenia jest wymagany.');
+    
+    if (errors.value.length === 0) {
+        activateCallback(4);
+    }
+};
+
 const saveUser = async () => {
     try {
         console.log(userData.value);
@@ -196,10 +268,4 @@ const customBase64Uploader = async (event) => {
         const base64data = reader.result;
     };
 };
-
-const activeStep = ref(1);
-const name = ref();
-const email = ref();
-const password = ref();
-
 </script>
