@@ -19,10 +19,12 @@
                     <div class="flex flex-col gap-2">
                         <label for="email" class="font-medium">Email</label>
                         <InputText id="email" v-model="email" aria-describedby="email-help" class="p-2 border rounded" />
+                        <small v-if="errors.email" class="text-red-600">{{ errors.email }}</small>
                     </div>
                     <div class="flex flex-col gap-2">
                         <label for="password" class="font-medium">Hasło</label>
                         <InputText id="password" v-model="password" type="password" aria-describedby="password-help" class="p-2 border rounded" />
+                        <small v-if="errors.password" class="text-red-600">{{ errors.password }}</small>
                         <small id="password-help" class="text-right text-sm text-gray-500">Zapomniałeś hasła?</small>
                     </div>
                     <div class="flex items-center">
@@ -50,17 +52,40 @@ import axios from 'axios';
 const email = ref('');
 const password = ref('');
 const remember = ref(false);
+const errors = ref({
+    email: '',
+    password: ''
+});
+
+const validateForm = () => {
+    let valid = true;
+    errors.value.email = '';
+    errors.value.password = '';
+
+    if (!email.value) {
+        errors.value.email = 'Email jest wymagany.';
+        valid = false;
+    }
+
+    if (!password.value) {
+        errors.value.password = 'Hasło jest wymagane.';
+        valid = false;
+    }
+
+    return valid;
+};
 
 const handleSubmit = async () => {
-    try {
-        const response = await axios.post('/login', {
-            email: email.value,
-            password: password.value,
-        });
-        window.location.href = '/dashboard';
-    } catch (error) {
-        alert('Niepoprawne dane logowania');
-        console.error('Błąd logowania:', error);
+    if (validateForm()) {
+        try {
+            const response = await axios.post('/login', {
+                email: email.value,
+                password: password.value,
+            });
+            window.location.href = '/dashboard';
+        } catch (error) {
+            console.error('Błąd logowania:', error);
+        }
     }
 };
 </script>
