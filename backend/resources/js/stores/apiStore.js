@@ -12,15 +12,15 @@ function safeParse(jsonString) {
 
 export const useApiStore = defineStore('api', {
     state: () => ({
-        user: safeParse(localStorage.getItem('user')) || null, 
-        plan: safeParse(localStorage.getItem('defaultPlan')) || null, 
+        user: safeParse(sessionStorage.getItem('user')) || null, 
+        plan: safeParse(sessionStorage.getItem('defaultPlan')) || null, 
         loading: false,
         error: null,
     }),
 
     actions: {
         async fetchUserData() {
-            const storedUser = localStorage.getItem('user');
+            const storedUser = sessionStorage.getItem('user');
             if (storedUser) {
                 this.user = safeParse(storedUser);  
                 return;  
@@ -32,7 +32,7 @@ export const useApiStore = defineStore('api', {
             try {
                 const response = await axios.get('/fetch-user-data');
                 this.user = response.data.user;  
-                localStorage.setItem('user', JSON.stringify(this.user));  
+                sessionStorage.setItem('user', JSON.stringify(this.user));  
             } catch (error) {
                 this.error = 'Failed to fetch user data';
             } finally {
@@ -41,7 +41,7 @@ export const useApiStore = defineStore('api', {
         },
 
         async fetchDefaultPlan() {
-            const storedDefaultPlan = localStorage.getItem('defaultPlan');
+            const storedDefaultPlan = sessionStorage.getItem('defaultPlan');
             if (storedDefaultPlan) {
                 this.plan = safeParse(storedDefaultPlan);
                 return;
@@ -53,7 +53,7 @@ export const useApiStore = defineStore('api', {
             try {
                 const response = await axios.get('/user/get-default-plan');
                 this.plan = response.data; 
-                localStorage.setItem('defaultPlan', JSON.stringify(this.plan)); 
+                sessionStorage.setItem('defaultPlan', JSON.stringify(this.plan)); 
             } catch (error) {
                 this.error = 'Failed to fetch default plan';
             } finally {
@@ -63,12 +63,12 @@ export const useApiStore = defineStore('api', {
 
         clearUserData() {
             this.user = null;  
-            localStorage.removeItem('user');  
+            sessionStorage.removeItem('user');  
         },
 
         clearDefaultPlan() {
             this.plan = null;
-            localStorage.removeItem('defaultPlan');
+            sessionStorage.removeItem('defaultPlan');
         }
     },
 });

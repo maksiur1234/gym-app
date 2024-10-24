@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class UserTrainingPlanController extends Controller
 {
     protected $userTrainingPlanRepo;
+    protected $trainingPlanService;
 
     public function __construct(
         UserTrainingPlanRepositoryInterface $userTrainingPlanRepo,

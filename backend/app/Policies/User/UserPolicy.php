@@ -2,6 +2,7 @@
 
 namespace App\Policies\User;
 
+use App\Enums\Role;
 use App\Models\User\User;
 
 class UserPolicy
@@ -12,6 +13,6 @@ class UserPolicy
 
     public function update(User $currentUser, User $user)
     {
-        return $currentUser->role_id === 1;
+        return $currentUser->role_id === Role::Admin->value;
     }
 }

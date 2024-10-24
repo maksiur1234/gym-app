@@ -3,6 +3,7 @@ import 'primeicons/primeicons.css'
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import { useApiStore } from './stores/apiStore';
 
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
@@ -83,6 +84,8 @@ app.use(PrimeVue, {
 
 app.use(pinia)
 app.use(setupCalendar, {})
+
+const apiStore = useApiStore();
 
 app.component('VCalendar', Calendar)
 app.component('VDatePicker', DatePicker)

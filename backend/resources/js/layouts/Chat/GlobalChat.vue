@@ -124,15 +124,15 @@ onMounted(() => {
 }
 
 .message-sent {
-  align-self: flex-start; /* Wyrównaj do lewej */
-  background-color: #d1e7dd; /* Kolor tła wiadomości wysłanej */
-  color: #0f5132; /* Kolor tekstu dla wiadomości wysłanej */
+  align-self: flex-start; 
+  background-color: #d1e7dd; 
+  color: #0f5132;
 }
 
 .message-received {
-  align-self: flex-end; /* Wyrównaj do prawej */
-  background-color: #f8d7da; /* Kolor tła wiadomości odebranej */
-  color: #721c24; /* Kolor tekstu dla wiadomości odebranej */
+  align-self: flex-end; 
+  background-color: #f8d7da; 
+  color: #721c24; 
 }
 
 .form-container {

@@ -15,7 +15,7 @@
                                 <div class="flex flex-col md:items-end gap-8">
                                     <span class="text-lg font-medium mt-2">{{ item.desc }}</span>
                                     <div class="flex flex-row-reverse md:flex-row gap-2">
-                                        <Button icon="pi pi-heart" outlined label="Ustaw jako domyślny" @click="setAsDefault(item.id)"></Button>
+                                        <Button icon="pi pi-heart" outlined label="Ustaw jako domyślny" @click="setAsDefault(item)"></Button>
                                         <Button label="Zobacz szczegóły" class="flex-auto md:flex-initial whitespace-nowrap" as="a" :href="`/training-plan-details/${item.id}`"></Button>
                                     </div>
                                 </div>
@@ -27,7 +27,6 @@
         </DataView>
     </div>
 </template>
-
 
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -47,9 +46,14 @@ const fetchUserPlans = async () => {
     }
 };
 
-const setAsDefault = async (planId) => {
+const setAsDefault = async (plan) => {
     try {
-        await axios.post('/user/set-default-plan', { training_plan_id: planId });
+        // Wysłanie zapytania do serwera w celu aktualizacji domyślnego planu
+        await axios.post('/user/set-default-plan', { training_plan_id: plan.id });
+        
+        // Zaktualizowanie sessionStorage
+        sessionStorage.setItem('defaultPlan', JSON.stringify(plan));
+
         alert('Domyślny plan treningowy został zaktualizowany.');
     } catch (error) {
         console.error('Error setting default plan:', error);

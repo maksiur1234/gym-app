@@ -174,6 +174,7 @@
 <script setup>
 import { ref } from 'vue';
 import axios from "axios";
+import { Role } from '../../enums/Role';
 
 const userData = ref({
     name: '',
@@ -186,7 +187,7 @@ const userData = ref({
     age: '',
     training_intership: '',
     desc: '',
-    role_id: 3,
+    role_id: Role.NORMAL,
 });
 
 const activeStep = ref(1);

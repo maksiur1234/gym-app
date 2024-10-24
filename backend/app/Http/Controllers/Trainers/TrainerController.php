@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Trainers;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TrainerResource;
 use App\Http\Resources\UserResource;
@@ -42,7 +43,7 @@ class TrainerController extends Controller
 
     public function aboutTrainer($id)
     {
-        $trainer = User::where('role_id', 2)->find($id);
+        $trainer = User::where('role_id', Role::Trainer->value)->find($id);
 
         if (!$trainer) {
             return response()->json(['message' => 'Trainer not found'], 404);

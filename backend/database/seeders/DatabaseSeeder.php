@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::factory(5)->create();
+        Role::factory(3)->create();
         User::factory(10)->create();
         TrainingPlan::factory(10)->create();
         Exercise::factory(20)->create();
