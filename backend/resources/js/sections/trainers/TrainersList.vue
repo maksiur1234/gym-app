@@ -29,8 +29,6 @@ import axios from 'axios';
 import { useApiStore } from '../../stores/apiStore';
 
 const trainers = ref([]);
-const user = ref({});
-const userId = ref();
 const apiStore = useApiStore();
 
 const fetchTrainers = async () => {
@@ -47,13 +45,7 @@ const truncateText = (text, maxLength) => {
 }
 
 const handleCollaboration = async (trainerId) => {
-  if (!userId.value) {
-    alert('Nie udało się pobrać danych użytkownika.');
-    return;
-  }
-
   try {
-    
     window.location.href = `/chat/${trainerId}`;
   } catch (error) {
     console.error('Błąd wysyłania powiadomienia:', error);

@@ -57,6 +57,10 @@ class MessageController extends Controller
 
     public function message(Request $request)
     {
+        if ($request['user_id'] == $request['receiver_id']) {
+            return response()->json(['error' => 'Cant send message to yourself.'], 400);
+        }
+        
         $message = $this->messageRepository->sendMessage($request->only(['user_id', 'text', 'receiver_id']));
         SendMessage::dispatch($message);
 
