@@ -175,18 +175,24 @@ const addToSchedule = async () => {
     }
 };
 
-
 const fetchPlanDetails = async () => {
     try {
-        const currentPlan = await axios.get('/user/get-default-plan');
-        planId.value = currentPlan.data.id;
-        
-        const response = await axios.get(`/training-plan-details-data/${planId.value}`);
-        plan.value = response.data;
+        const currentPlan = sessionStorage.getItem('defaultPlan');
+
+        if (currentPlan) {
+            const planData = JSON.parse(currentPlan);
+            planId.value = planData.id;  
+
+            const response = await axios.get(`/training-plan-details-data/${planId.value}`);
+            plan.value = response.data;
+        } else {
+            console.error('Nie znaleziono planu w sessionStorage.');
+        }
     } catch (error) {
         console.error('Error fetching plan details:', error);
     }
 };
+
 
 onMounted(() => {
     fetchPlanDetails();
