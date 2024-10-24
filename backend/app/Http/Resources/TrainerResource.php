@@ -22,6 +22,7 @@ class TrainerResource extends JsonResource
             'profile_photo_path' => $this->resource->profile_photo_path,
             'email' => $this->resource->email,
             'role' => $this->resource->role,
+            'training_intership' => $this->resource->training_intership,
         ];
     }
 }

@@ -7,7 +7,7 @@
         </div>
       </template>
       <template #title>{{ trainer.name }} {{ trainer.surname }}</template>
-      <template #subtitle>Staż treningowy: {{ trainer.training_intership }} lata</template>
+      <template #subtitle>Staż treningowy: {{ trainer.training_intership }} lat</template>
       <template #content>
         <p class="m-0">
           {{ truncateText(trainer.desc, 150) }}
@@ -35,7 +35,7 @@ import { useApiStore } from '../../stores/apiStore';
 
 const trainers = ref([]);
 const apiStore = useApiStore();
-const userId = ref(null);  // Zmienna na ID zalogowanego użytkownika
+const userId = ref(null);
 
 const fetchTrainers = async () => {
   try {
