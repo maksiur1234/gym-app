@@ -44,11 +44,12 @@
             <p v-else class="text-center text-gray-500 dark:text-gray-400">Loading...</p>
         </template>
         <template #footer>
-            <div class="mt-6 flex justify-end message">
+            <div class="mt-6 flex justify-end message" v-if="trainer">
                 <Button
                     label="Wyślij prośbę o współpracę"
                     class="rounded-lg bg-green-500 text-white font-bold py-2 px-4 hover:bg-green-600 transition-all"
                     @click="sendMessage"
+                    :disabled="trainer.id === props.user.id"
                 />
             </div>
         </template>
