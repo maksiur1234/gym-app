@@ -48,11 +48,9 @@ const fetchUserPlans = async () => {
 
 const setAsDefault = async (plan) => {
     try {
-        // Wysłanie zapytania do serwera w celu aktualizacji domyślnego planu
         await axios.post('/user/set-default-plan', { training_plan_id: plan.id });
         
-        // Zaktualizowanie sessionStorage
-        sessionStorage.setItem('defaultPlan', JSON.stringify(plan));
+        localStorage.setItem('defaultPlan', JSON.stringify(plan));
 
         alert('Domyślny plan treningowy został zaktualizowany.');
     } catch (error) {

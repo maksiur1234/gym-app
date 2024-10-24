@@ -30,17 +30,22 @@ class MessageRepository implements MessageRepositoryInterface
     {
         return Message::where('user_id', $userId)
             ->orWhere('receiver_id', $userId)
-            ->with(['user', 'receiver'])
-            ->distinct('receiver_id')
-            ->get(['receiver_id'])
+            ->with(['user', 'receiver']) 
+            ->get()
+            ->filter(function ($message) use ($userId) {
+                return $message->receiver_id !== $userId || $message->user_id !== $userId;
+            })
             ->map(function ($message) use ($userId) {
+                $partnerId = $message->user_id === $userId ? $message->receiver_id : $message->user_id;
+    
                 return [
-                    'id' => $message->receiver_id,
-                    'name' => $message->receiver->name ?? 'Nieznany użytkownik', 
+                    'id' => $partnerId,
+                    'name' => $message->user_id === $userId ? $message->receiver->name : $message->user->name,
                 ];
-            });
+            })
+            ->unique('id');
     }
-
+    
     public function sendMessage($data)
     {
         return Message::create([

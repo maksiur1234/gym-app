@@ -201,6 +201,8 @@
                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
               }
           });
+          
+          localStorage.clear();
 
           if (response.ok) {
               window.location.href = '/login';

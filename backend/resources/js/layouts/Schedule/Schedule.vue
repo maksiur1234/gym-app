@@ -2,6 +2,7 @@
     <div class="flex justify-center items-center min-h-screen">
         <Card class="max-w-md w-full shadow-lg">
             <template #content>
+                <div v-if="planData">
                 <div class="main mb-4 text-left">
                     <Button as="a" label="Wróć" href="/dashboard" rel="noopener" class="rounded-lg bg-gradient-to-br from-primary-400 to-primary-700 text-white px-6 py-3 font-bold transition-all hover:bg-opacity-90" />
                     
@@ -53,6 +54,10 @@
                         class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-all"
                     />
                 </div>
+            </div>
+            <div v-else>
+                <p>Brak ustawionego domyslnego planu</p>
+            </div>
             </template>
         </Card>
     </div>
@@ -76,6 +81,8 @@ const numberOfUnits = ref(1);
 const schedule = ref();
 const isDark = ref(true);
 const moreDays = ref(false);
+const planData = localStorage.getItem('defaultPlan');
+console.log(planData)
 
 const getScheduleData = async () => {
     try {
@@ -177,7 +184,7 @@ const addToSchedule = async () => {
 
 const fetchPlanDetails = async () => {
     try {
-        const currentPlan = sessionStorage.getItem('defaultPlan');
+        const currentPlan = localStorage.getItem('defaultPlan');
 
         if (currentPlan) {
             const planData = JSON.parse(currentPlan);
@@ -186,7 +193,7 @@ const fetchPlanDetails = async () => {
             const response = await axios.get(`/training-plan-details-data/${planId.value}`);
             plan.value = response.data;
         } else {
-            console.error('Nie znaleziono planu w sessionStorage.');
+            console.error('Nie znaleziono planu w localStorage.');
         }
     } catch (error) {
         console.error('Error fetching plan details:', error);

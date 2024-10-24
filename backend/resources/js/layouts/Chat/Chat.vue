@@ -21,8 +21,10 @@
             >
               <strong>{{ msg.user_id }}</strong>: {{ msg.text }}
               <div v-if="msg.status === 'pending' && msg.receiver_id === userId">
-                <Button class="m-2" label="Akceptuj" @click="acceptRequest(msg.id)" />
-                <Button label="Odrzuć" @click="rejectRequest(msg.id)" severity="danger"/>
+                <div v-if="!messages.some(m => m.status === 'accepted')">
+                  <Button class="m-2" label="Akceptuj" @click="acceptRequest(msg.id)" />
+                  <Button label="Odrzuć" @click="rejectRequest(msg.id)" severity="danger"/>
+                </div>
               </div>
             </div>
           </div>
@@ -134,7 +136,6 @@ onMounted(() => {
 });
 </script>
 
-
 <style scoped>
 .chat-container {
   max-width: 600px;
@@ -183,27 +184,6 @@ onMounted(() => {
 .form-container {
   display: flex;
   gap: 10px;
-}
-
-.form-control {
-  flex-grow: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn:hover {
-  background-color: #0056b3;
 }
 
 .message-info {
