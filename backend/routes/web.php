@@ -11,6 +11,7 @@ use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Schedule\TrainingScheduleController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\SkillTree\SkillTreeController;
+use App\Http\Controllers\Statistics\StatsController;
 use App\Http\Controllers\TrainingPlan\ReadyTrainingPlanController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\Workout\WorkoutController;
@@ -81,6 +82,8 @@ Route::middleware([
 
     Route::get('/skill-tree', [SkillTreeController::class, 'index']);
     Route::get('/get-level', [SkillTreeController::class, 'skillLevel']);
+
+    Route::get('/user/stats', [StatsController::class, 'getStats']);
 });
 
 Route::middleware([
