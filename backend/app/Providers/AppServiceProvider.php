@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\TrainingPlan\TrainingDayExercise;
 use App\Models\User\User;
+use App\Models\Workout\WorkoutExercise;
 use App\Policies\User\UserPolicy;
 use App\Repositories\Exercise\ExerciseRepository;
 use App\Repositories\Exercise\ExerciseRepositoryInterface;
@@ -31,8 +32,14 @@ use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Notification\NotificationRepositoryInterface;
 use App\Repositories\Schedule\TrainingScheduleRepository;
 use App\Repositories\Schedule\TrainingScheduleRepositoryInterface;
+use App\Repositories\Workout\WorkoutExerciseRepository;
+use App\Repositories\Workout\WorkoutExerciseRepositoryInterface;
+use App\Repositories\Workout\WorkoutSessionRepository;
+use App\Repositories\Workout\WorkoutSessionRepositoryInterface;
 use App\Services\Notification\NotificationService;
 use App\Services\Notification\NotificationServiceInterface;
+use App\Services\Workout\WorkoutService;
+use App\Services\Workout\WorkoutServiceInterface;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -59,6 +66,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
         $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
         $this->app->bind(TrainingScheduleRepositoryInterface::class, TrainingScheduleRepository::class);
+        $this->app->bind(WorkoutServiceInterface::class, WorkoutService::class);
+        $this->app->bind(WorkoutExerciseRepositoryInterface::class, WorkoutExerciseRepository::class);
+        $this->app->bind(WorkoutSessionRepositoryInterface::class, WorkoutSessionRepository::class);
     }
 
     /**

@@ -18,7 +18,7 @@
                         :label="isTrainingActive ? 'Anuluj trening' : 'Rozpocznij trening'"
                         class="ml-2 mb-4"
                     />
-                    <CurrentTrainingCard v-if="isTrainingActive"/>
+                    <CurrentTrainingCard v-if="isTrainingActive" :sessionId="sessionId"/>
                 </div>
                 <div class="mb-2">
                     <BasicInfo />
@@ -45,6 +45,7 @@ import axios from 'axios';
 
 const isTrainingActive = ref(false);
 const currentPlanId = ref(null);
+const sessionId = ref(null);
 
 const fetchCurrentPlan = async () => {
     try {
@@ -56,29 +57,23 @@ const fetchCurrentPlan = async () => {
 };
 
 const toggleTraining = async () => {
-    if (isTrainingActive.value) {
+    if (!isTrainingActive.value) {
         try {
-            await axios.post('/workout/end', {
-                session_id: currentSessionId.value,
-            });
-            isTrainingActive.value = false;
-        } catch (error) {
-            console.error('Error ending workout session:', error);
-        }
-    } else {
-        try {
-            const response = await axios.post('/workout/start', {
+            const response = await axios.post('/workout/start', { 
                 training_plan_id: currentPlanId.value,
             });
-            currentSessionId.value = response.data.session_id;
+
+            sessionId.value = response.data.session_id;
             isTrainingActive.value = true;
         } catch (error) {
-            console.error('Error starting workout session:', error);
+            console.error("Błąd podczas rozpoczęcia treningu:", error);
         }
+    } else {
+        isTrainingActive.value = false;
+        console.log("Trening anulowany.");
     }
 };
 
-const currentSessionId = ref(null);
 
 onMounted(() => {
     fetchCurrentPlan();

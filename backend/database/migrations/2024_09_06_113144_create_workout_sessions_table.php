@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('training_plan_id');
-            $table->timestamp('start_time');
-            $table->timestamp('end_time')->nullable();
+            $table->integer('session_id')->unique();
             $table->integer('total_sets')->nullable();
+            $table->integer('total_reps')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('training_plan_id')->references('id')->on('training_plans')->onDelete('cascade');
             $table->timestamps();

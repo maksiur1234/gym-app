@@ -12,8 +12,13 @@ class WorkoutSession extends Model
     protected $fillable = [
         'user_id',
         'training_plan_id',
-        'start_time',
-        'end_time',
+        'session_id',
         'total_sets',
+        'total_reps',
     ];
+
+    public function exercises()
+    {
+        $this->hasMany(WorkoutExercise::class);
+    }
 }

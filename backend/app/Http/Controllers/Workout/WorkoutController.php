@@ -1,55 +1,60 @@
 <?php
-
 namespace App\Http\Controllers\Workout;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Workout\WorkoutSession;
-use App\Models\User;
+use App\Http\Requests\Workout\EndTrainingRequest;
+use App\Http\Requests\Workout\StartTrainingRequest;
+use App\Services\Workout\WorkoutServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+use Exception;
 
 class WorkoutController extends Controller
 {
-    public function startTraining(Request $request)
+    protected $workoutService;
+
+    public function __construct(WorkoutServiceInterface $workoutService)
     {
-        $user = Auth::user();
-        $trainingPlanId = $request->input('training_plan_id');
-
-        $session = WorkoutSession::create([
-            'user_id' => $user->id,
-            'training_plan_id' => $trainingPlanId,
-            'start_time' => now(),
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'session_id' => $session->id,
-            'start_time' => $session->start_time,
-        ]);
+        $this->workoutService = $workoutService;
     }
 
-    public function endTraining(Request $request)
+    public function startTraining(StartTrainingRequest $request): JsonResponse
     {
-        $sessionId = $request->input('session_id');
-        $totalSets = $request->input('total_sets');
+        $user = Auth::user();
 
-        $session = WorkoutSession::find($sessionId);
-
-        if ($session) {
-            $session->update([
-                'end_time' => now(),
-                'total_sets' => $totalSets,
+        try {
+            $workoutSession = $this->workoutService->startTraining([
+                'user_id' => $user->id,
+                'training_plan_id' => $request->training_plan_id,
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Trening zakończony',
-            ]);
+                'session_id' => $workoutSession->id,
+            ], 201); 
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Cannot begin training.',
+                'details' => $e->getMessage(), 
+            ], 500);
         }
+    }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Sesja treningowa nie znaleziona',
-        ], 404);
+    public function endTraining(EndTrainingRequest $request): JsonResponse
+    {
+        try {
+            $workoutSession = $this->workoutService->endTraining($request->session_id, $request->validated());
+
+            if ($workoutSession) {
+                return response()->json(['message' => 'Successfully saved workout.'], 200);
+            } else {
+                return response()->json(['error' => 'Session not found.'], 404); 
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Cant end workout. Try again later.',
+                'details' => $e->getMessage(),
+            ], 500);
+        }
     }
 }
