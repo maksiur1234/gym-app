@@ -12,17 +12,9 @@
                 <p>Wzrost: {{ apiStore.user.height }}</p>
                 <p>Staż treningowy: {{ apiStore.user.training_intership }} lat</p>
             </p>
-            <h1>Statystyki treningowe</h1>
-            <p>Ilość wszystkich serii: {{ stats.totalSets }}</p>
-            <p>Ilość wszystkich powtórzeń: {{ stats.totalReps }}</p>
-            <p>Ilość zrealizowanych treningów: {{ stats.totalSessions }}</p>
-            <p>Ilość ćwiczeń: {{ stats.totalExercises }}</p>
-            <h2>Szczegóły ćwiczeń</h2>
-            <ul>
-                <li v-for="exercise in stats.exerciseDetails" :key="exercise.exercise_name">
-                    {{ exercise.exercise_name }}: {{ exercise.total_sets }} serie, {{ exercise.total_reps }} powtórzeń
-                </li>
-            </ul>
+            <h1 class="mt-2">Statystyki treningowe</h1>
+            <p>Ilość sesji treningowych: {{ stats.totalSessions }}</p>
+            <p>Ilość wykonanych ćwiczeń: {{ stats.totalExercises }}</p>
         </Panel>
     </div>
 </template>
@@ -32,12 +24,16 @@ import { ref, onMounted } from 'vue';
 import { useApiStore } from '../../stores/apiStore';
 import axios from 'axios';
 
-const stats = ref({});
+const stats = ref([]);
 
 const fetchUserStats = async () => {
-    const response = await axios.get('/user/stats');
-    stats.value = response.data;
-    console.log(stats.value);
+    try {
+        const response = await axios.get('/user/stats');
+        stats.value = response.data.stats.basic; 
+        console.log(response.data.stats.basic);
+    } catch (error) {
+        console.error('Błąd podczas pobierania statystyk:', error);
+    }
 };
 
 const apiStore = useApiStore();

@@ -32,6 +32,8 @@ use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Notification\NotificationRepositoryInterface;
 use App\Repositories\Schedule\TrainingScheduleRepository;
 use App\Repositories\Schedule\TrainingScheduleRepositoryInterface;
+use App\Repositories\Statistics\StatisticsRepository;
+use App\Repositories\Statistics\StatisticsRepositoryInterface;
 use App\Repositories\Workout\WorkoutExerciseRepository;
 use App\Repositories\Workout\WorkoutExerciseRepositoryInterface;
 use App\Repositories\Workout\WorkoutSessionRepository;
@@ -69,6 +71,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(WorkoutServiceInterface::class, WorkoutService::class);
         $this->app->bind(WorkoutExerciseRepositoryInterface::class, WorkoutExerciseRepository::class);
         $this->app->bind(WorkoutSessionRepositoryInterface::class, WorkoutSessionRepository::class);
+        $this->app->bind(StatisticsRepositoryInterface::class, StatisticsRepository::class);
     }
 
     /**
