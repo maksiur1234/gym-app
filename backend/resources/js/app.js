@@ -69,6 +69,7 @@ import DataView from 'primevue/dataview';
 import Tag from 'primevue/tag';
 import Checkbox from 'primevue/checkbox';
 import OrganizationChart from 'primevue/organizationchart';
+import Chart from 'primevue/chart';
 
 import { setupCalendar, Calendar, DatePicker } from 'v-calendar';
 import 'v-calendar/style.css';
