@@ -27,6 +27,7 @@ import Dialog from 'primevue/dialog';
 import GlobalChat from './layouts/Chat/GlobalChat.vue';
 import List from './layouts/Chat/List.vue';
 import Chat from './layouts/Chat/Chat.vue';
+import Statistics from './layouts/statistics/Statistics.vue';
 import theme from 'tailwindcss/defaultTheme';
 
 import Menubar from 'primevue/menubar';
@@ -110,6 +111,7 @@ app.component('skill-tree-component', SkillTree);
 app.component('global-chat-component', GlobalChat);
 app.component('chats-list-component', List);
 app.component('private-chat-component', Chat);
+app.component('statistics-component', Statistics);
 
 app.component('Panel', Panel);
 app.component('Button', Button);

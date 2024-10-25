@@ -18,6 +18,11 @@ class StatsController extends Controller
     {
         $this->statsRepository = $statsRepository;
     }
+
+    public function index()
+    {
+        return view('statistics.index');
+    }
     public function getStats()
     {
         $user = Auth::user();

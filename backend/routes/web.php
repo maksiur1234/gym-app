@@ -84,6 +84,7 @@ Route::middleware([
     Route::get('/get-level', [SkillTreeController::class, 'skillLevel']);
 
     Route::get('/user/stats', [StatsController::class, 'getStats']);
+    Route::get('/statistics', [StatsController::class, 'index']);
 });
 
 Route::middleware([
