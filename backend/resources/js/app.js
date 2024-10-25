@@ -156,5 +156,6 @@ app.component('Tag', Tag);
 app.component('Checkbox', Checkbox);
 app.component('OrganizationChart', OrganizationChart);
 app.component('Dialog', Dialog);
+app.component('Chart', Chart);
 
 app.mount("#app");
