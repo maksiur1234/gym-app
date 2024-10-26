@@ -7,9 +7,36 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useApiStore } from "../../stores/apiStore";
+import axios from "axios";
+
+const apiStore = useApiStore();
+
+const stats = ref({
+    basic: {
+        totalSessions: 0,
+        totalExercises: 0,
+        completedSessions: 0,
+    },
+    totalSets: 0,
+    totalReps: 0,
+    exerciseDetails: []
+});
+
+const fetchUserStats = async () => {
+    try {
+        const response = await axios.get('/user/stats');
+        stats.value = response.data.stats;
+
+        chartData.value = setChartData();
+    } catch (error) {
+        console.error('Błąd podczas pobierania statystyk:', error);
+    }
+};
 
 onMounted(() => {
-    chartData.value = setChartData();
+    apiStore.fetchUserData();
+    fetchUserStats();
     chartOptions.value = setChartOptions();
 });
 
@@ -18,21 +45,24 @@ const chartOptions = ref();
 
 const setChartData = () => {
     const documentStyle = getComputedStyle(document.documentElement);
+    const labels = stats.value.exerciseDetails.map(detail => detail.exercise_name);
+    const dataReps =  stats.value.exerciseDetails.map(detail => parseInt(detail.total_reps));
+    const dataSets = stats.value.exerciseDetails.map(detail => parseInt(detail.total_sets));
 
     return {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels,
         datasets: [
             {
-                label: 'My First dataset',
+                label: 'Ilość powtórzeń w ćwiczeniu',
                 backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
                 borderColor: documentStyle.getPropertyValue('--p-cyan-500'),
-                data: [65, 59, 80, 81, 56, 55, 40]
+                data: dataReps
             },
             {
-                label: 'My Second dataset',
+                label: 'Ilość serii w ćwiczeniu',
                 backgroundColor: documentStyle.getPropertyValue('--p-gray-500'),
                 borderColor: documentStyle.getPropertyValue('--p-gray-500'),
-                data: [28, 48, 40, 19, 86, 27, 90]
+                data: dataSets
             }
         ]
     };

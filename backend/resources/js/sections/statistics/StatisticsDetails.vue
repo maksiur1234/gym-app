@@ -81,7 +81,6 @@ import { ref, onMounted } from 'vue';
 import { useApiStore } from '../../stores/apiStore';
 import axios from 'axios';
 
-// Zmiana na obiekt
 const stats = ref({
     basic: {
         totalSessions: 0,
@@ -96,8 +95,7 @@ const stats = ref({
 const fetchUserStats = async () => {
     try {
         const response = await axios.get('/user/stats');
-        stats.value = response.data.stats;  // Zakładam, że odpowiedź zawiera pole 'stats'
-        console.log(stats.value);
+        stats.value = response.data.stats;
     } catch (error) {
         console.error('Błąd podczas pobierania statystyk:', error);
     }
