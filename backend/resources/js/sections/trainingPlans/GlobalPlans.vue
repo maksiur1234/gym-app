@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-wrap gap-4 p-2 m-2">
+    <div class="flex flex-wrap gap-4 p-2 m-2" v-if="plans.length">
         <Card v-for="plan in plans" :key="plan.id" style="width: 25rem; overflow: hidden">
             <template #header>
                 <div class="flex justify-center mt-4">
@@ -9,12 +9,17 @@
             <template #title>{{ plan.desc }}</template>
             <template #subtitle>{{ plan.price }} PLN</template>
             <template #content>
-                <p class="m-0"></p>
+                <p class="m-0">
+                    {{ plan.id }}
+                </p>
             </template>
             <template #footer>
-                <Button as="a" @click="checkout(plan.price)" label="Kup plan" rel="noopener" class="mr-2" severity="primary" />
+                <Button as="a" @click="checkout(plan.price, plan.id, plan.name, plan.desc, plan.created_by)" label="Kup plan" rel="noopener" class="mr-2" severity="primary" />
             </template>
         </Card>
+    </div>
+    <div v-else>
+        <p>Brak planow</p>
     </div>
 </template>
 
@@ -33,9 +38,9 @@ const fetchReadyPlans = async () => {
     }
 };
 
-const checkout = async (price) => {
+const checkout = async (price, id, name, desc, created_by) => {
     try {
-        window.location.href = `/stripe?price=${price}`;
+        window.location.href = `/stripe?price=${price}&planId=${id}&name=${name}&desc=${desc}&created_by=${created_by}`;
     } catch (error) {
         console.error(error);
     }
