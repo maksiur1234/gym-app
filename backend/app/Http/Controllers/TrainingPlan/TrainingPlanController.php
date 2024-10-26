@@ -34,7 +34,7 @@ class TrainingPlanController extends Controller
     {
         $user = Auth::user();
 
-        $trainingPlans = $this->trainingPlanRepo->getByUserId($user->id);
+        $trainingPlans = $this->trainingPlanRepo->getAssignedPlans($user->id);
 
         return response()->json($trainingPlans);
     }

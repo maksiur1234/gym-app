@@ -37,14 +37,14 @@ class TrainingPlanService implements TrainingPlanServiceInterface
             'name' => $data['planName'],
             'desc' => $data['planDesc'],
             'created_by' => $data['user_id'],
-            'user_id' => $data['user_id'],
+            'is_global' => $data['is_global'],
         ]);
 
         // add training days and exercises
         foreach (range(1, $data['trainingDays']) as $dayIndex) {
             $trainingDay = $this->trainingDayRepo->create([
                 'training_plan_id' => $trainingPlan->id,
-                'day_name' => 'Dzień ' . $dayIndex,
+                'day_name' => 'Jednostka treningowa ' . $dayIndex,
             ]);
 
             if (isset($data['rows'][$dayIndex])) {
@@ -79,6 +79,7 @@ class TrainingPlanService implements TrainingPlanServiceInterface
             'desc' => $data['planDesc'],
             'created_by' => Auth::user()->id,
             'price' => $data['price'],
+            'is_global' => $data['is_global'],
         ]);
         
         // add training days and exercises
@@ -104,11 +105,6 @@ class TrainingPlanService implements TrainingPlanServiceInterface
                 throw new \Exception('No exercises provided for day ' . $dayIndex);
             }
         }
-
-        $this->userTrainingPlanRepo->create([
-            'user_id' => Auth::user()->id,
-            'training_plan_id' => $trainingPlan->id,
-        ]);
 
         return $trainingPlan;
     }

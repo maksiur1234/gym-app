@@ -25,66 +25,48 @@ class StripeController extends Controller
 
     $price = $request->input('price') * 100; // price in GR
     $planId = $request->input('planId');
-    $name = $request->input('name');
-    $desc = $request->input('desc');
-    $created_by = $request->input('created_by');
 
     $session = \Stripe\Checkout\Session::create([
-       'line_items' => [
-           [
-               'price_data' => [
-                   'currency' => 'pln',
-                   'product_data' => [
-                       'name' => 'Zakup plan treningowy',
-                   ],
-                   'unit_amount' => $price,
-               ],
-               'quantity' => 1,
-           ],
-       ],
-       'metadata' => [
-           'planId' => $planId,
-           'name' => $name,
-           'desc' => $desc,
-           'created_by' => $created_by,
-       ],
-       'mode' => 'payment',
-       'success_url' => route('success') . '?session_id={CHECKOUT_SESSION_ID}&name={name}&desc={desc}&created_by={created_by}',
-       'cancel_url' => route('index'),
+        'line_items' => [
+            [
+                'price_data' => [
+                    'currency' => 'pln',
+                    'product_data' => [
+                        'name' => 'Zakup plan treningowy',
+                    ],
+                    'unit_amount' => $price,
+                ],
+                'quantity' => 1,
+            ],
+        ],
+        'metadata' => [
+            'planId' => $planId,
+        ],
+        'mode' => 'payment',
+        'success_url' => route('success') . '?session_id={CHECKOUT_SESSION_ID}', // Tylko session_id w URL
+        'cancel_url' => route('index'),
     ]);
-    // dd($session);
+
     return redirect()->away($session->url);
 }
 
+
     public function success(Request $request)
-{
-    \Stripe\Stripe::setApiKey(config('stripe.sk'));
+    {
+        \Stripe\Stripe::setApiKey(config('stripe.sk'));
 
-    $sessionId = $request->query('session_id'); 
-    $session = \Stripe\Checkout\Session::retrieve($sessionId);
+        $sessionId = $request->query('session_id'); 
+        $session = \Stripe\Checkout\Session::retrieve($sessionId);
 
-    $userId = auth()->id();
-    $trainingPlanId = $session->metadata->planId; 
+        $userId = auth()->id();
+        $trainingPlanId = $session->metadata->planId; 
 
-    $name = $session->metadata->name;
-    $desc = $session->metadata->desc;
-    $created_by = $session->metadata->created_by;
+        UserTrainingPlan::create([
+            'user_id' => $userId,
+            'training_plan_id' => $trainingPlanId,
+        ]);
 
-    TrainingPlan::create([
-        'name' => $name,
-        'desc' => $desc,
-        'user_id' => $userId,
-        'created_by' => $created_by,
-        'price' => null,
-    ]);
-
-    UserTrainingPlan::create([
-        'user_id' => $userId,
-        'training_plan_id' => $trainingPlanId,
-    ]);
-
-    return view('training_plans.index');
-}
-
+        return view('training_plans.index');
+    }
     
 }

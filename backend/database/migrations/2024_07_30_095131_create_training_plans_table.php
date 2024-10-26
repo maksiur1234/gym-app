@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('desc');
             $table->float('price')->nullable();
             $table->unsignedBigInteger('created_by');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->boolean('is_global');
             $table->timestamps();
         });
     }

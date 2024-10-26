@@ -16,7 +16,7 @@ class TrainingPlan extends Model
         'name',
         'desc',
         'created_by',
-        'user_id',
+        'is_global',
         'price'
     ];
 

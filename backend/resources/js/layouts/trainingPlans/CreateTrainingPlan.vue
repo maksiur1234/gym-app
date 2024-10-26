@@ -176,9 +176,9 @@ const validateStep3 = (activateCallback) => {
 const savePlan = async () => {
     try {
         const planData = {
-            user_id: selectedUser.value ? selectedUser.value.id : null,
             created_by: created_by.value,
             is_public: isPublic.value,
+            is_global: isPublic.value,
             trainingDays: trainingDays.value,
             additionalInfo: additionalInfo.value,
             planName: planName.value,

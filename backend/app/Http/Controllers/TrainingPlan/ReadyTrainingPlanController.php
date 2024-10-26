@@ -13,7 +13,7 @@ class ReadyTrainingPlanController extends Controller
 
    public function plans()
    {
-      $plans = TrainingPlan::where('user_id', null)->get();
+      $plans = TrainingPlan::where('is_global', true)->get();
       
       return response()->json($plans);
    }
