@@ -45,8 +45,9 @@ class TrainingPlanController extends Controller
     }
     public function store(StoreTrainingPlanRequest $request)
     {
+        // dd($request);
         $validatedData = $request->validated();
-
+        
         try {
             $trainingPlan = $this->trainingPlanService->createTrainingPlan($validatedData);
 

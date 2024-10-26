@@ -36,7 +36,7 @@ class TrainingPlanService implements TrainingPlanServiceInterface
         $trainingPlan = $this->trainingPlanRepo->create([
             'name' => $data['planName'],
             'desc' => $data['planDesc'],
-            'created_by' => $data['user_id'],
+            'created_by' => Auth::user()->id,
             'is_global' => $data['is_global'],
         ]);
 
@@ -86,7 +86,7 @@ class TrainingPlanService implements TrainingPlanServiceInterface
         foreach (range(1, $data['trainingDays']) as $dayIndex) {
             $trainingDay = $this->trainingDayRepo->create([
                 'training_plan_id' => $trainingPlan->id,
-                'day_name' => 'Dzień ' . $dayIndex,
+                'day_name' => 'Jednostka treningowa ' . $dayIndex,
             ]);
 
             if (isset($data['rows'][$dayIndex])) {
