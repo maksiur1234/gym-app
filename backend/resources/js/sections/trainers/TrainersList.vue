@@ -26,6 +26,23 @@
       </template>
     </Card>
   </div>
+  <div class="flex justify-between items-center mt-4">
+            <button
+                @click="previousPage"
+                :disabled="currentPage === 1"
+                class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+            >
+                Poprzednia
+            </button>
+            <span>Strona {{ currentPage }} z {{ totalPages }}</span>
+            <button
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+            >
+                Następna
+            </button>
+        </div>
 </template>
 
 <script setup>
@@ -36,6 +53,8 @@ import { useApiStore } from '../../stores/apiStore';
 const trainers = ref([]);
 const apiStore = useApiStore();
 const userId = ref(null);
+const currentPage = ref(1);
+const totalPages = ref();
 
 const fetchTrainers = async () => {
   try {
@@ -57,6 +76,20 @@ const handleCollaboration = async (trainerId) => {
     console.error('Błąd wysyłania powiadomienia:', error);
     alert('Nie udało się wysłać powiadomienia.');
   }
+}
+
+const nextPage = () => {
+    if(currentPage.value < totalPages.value){
+        currentPage.value++;
+        fetchUsers();
+    }
+}
+
+const previousPage = () => {
+    if(currentPage.value > 1){
+        currentPage.value--;
+        fetchUsers();
+    }
 }
 
 onMounted(async () => {
