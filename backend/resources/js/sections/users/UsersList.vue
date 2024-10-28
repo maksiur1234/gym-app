@@ -40,6 +40,23 @@
             </Column>
             <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
         </DataTable>
+        <div class="flex justify-between items-center mt-4">
+            <button
+                @click="previousPage"
+                :disabled="currentPage === 1"
+                class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+            >
+                Poprzednia
+            </button>
+            <span>Strona {{ currentPage }} z {{ totalPages }}</span>
+            <button
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+            >
+                Następna
+            </button>
+        </div>
     </div>
 </template>
 
@@ -50,6 +67,8 @@ import axios from 'axios';
 const users = ref([]);
 const editingRows = ref([]);
 const roles = ref([]);
+const currentPage = ref(1);
+const totalPages = ref();
 
 const fetchRoles = async () => {
     try {
@@ -65,12 +84,13 @@ const fetchRoles = async () => {
 
 const fetchUsers = async () => {
     try {
-        const response = await axios.get('/all-users');
+        const response = await axios.get(`/all-users?page=${currentPage.value}`);
         users.value = response.data.data;
+        totalPages.value = response.data.meta.last_page; 
     } catch (error) {
-        console.error(error);
+        console.error('Error fetching users:', error);
     }
-}
+};
 
 const onRowEditSave = async (event) => {
     let { newData, index } = event;
@@ -84,6 +104,20 @@ const onRowEditSave = async (event) => {
         console.error(error);
     }
 };
+
+const nextPage = () => {
+    if(currentPage.value < totalPages.value){
+        currentPage.value++;
+        fetchUsers();
+    }
+}
+
+const previousPage = () => {
+    if(currentPage.value > 1){
+        currentPage.value--;
+        fetchUsers();
+    }
+}
 
 onMounted(() => {
     fetchUsers();
