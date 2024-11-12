@@ -78,9 +78,8 @@ class WorkoutTest extends TestCase
     {
         $user = User::factory()->create();
 
-        // Przypadek, w którym session_id nie istnieje w bazie
         $data = [
-            'session_id' => 9999, // Zakładamy, że taki ID nie istnieje
+            'session_id' => 9999, 
             'total_reps' => 100,
             'total_sets' => 10,
             'exercises' => [
@@ -99,10 +98,8 @@ class WorkoutTest extends TestCase
     
         $response = $this->actingAs($user)->postJson('/workout/end', $data);
     
-        // Sprawdzamy, czy odpowiedź ma status 500
         $response->assertStatus(500);
     
-        // Sprawdzamy, czy odpowiedź zawiera odpowiedni komunikat o błędzie
         $response->assertJson([
             'error' => 'Cant end workout. Try again later.',
             'details' => 'Workout session not found.'
