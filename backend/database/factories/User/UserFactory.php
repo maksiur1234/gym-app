@@ -2,6 +2,7 @@
 
 namespace Database\Factories\User;
 
+use App\Models\Role;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,6 +25,8 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $role = Role::factory()->create();
+
         return [
             'name' => $this->faker->firstName,
             'surname' => $this->faker->lastName,
@@ -32,7 +35,7 @@ class UserFactory extends Factory
             'age' => $this->faker->numberBetween(18, 60),
             'training_intership' => $this->faker->numberBetween(1, 10),
             'desc' => $this->faker->paragraph,
-            'role_id' => $this->faker->numberBetween(1, 2),
+            'role_id' => $role->id,
             'profile_photo_path' => $this->faker->imageUrl,
             'email' => $this->faker->unique()->safeEmail,
             'password' => bcrypt('password'),

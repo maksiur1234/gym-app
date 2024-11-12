@@ -4,6 +4,7 @@ namespace Database\Factories\TrainingPlan;
 
 use App\Models\TrainingPlan\TrainingPlan;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TrainingPlan\TrainingPlan>
@@ -28,7 +29,8 @@ class TrainingPlanFactory extends Factory
             'name' => $this->faker->word,
             'desc' => $this->faker->paragraph,
             'created_by' => 1,
-            'user_id' => 1,
+            'price' => $this->faker->randomFloat,
+            'is_global' => $this->faker->boolean
         ];
     }
 }
